@@ -3,6 +3,7 @@ import {Col, Dropdown, Row} from "antd";
 import './UserLLayout.scss';
 import imglogo from '../../../assets/logo.png';
 import {FaCaretDown} from "react-icons/fa";
+import FooterUserLayoutAudioPlayer from "../../UI/FooterUserLayoutAudioPlayer";
 
 const items = [
   {
@@ -39,6 +40,8 @@ const items = [
 ];
 const UserLayout = () => {
   return (
+
+    <>
     <Row gutter={[0, 15]} justify={"center"}>
       <Col span={24} style={{backgroundColor: "#333333"}}>
         <Row justify={"center"}>
@@ -72,6 +75,8 @@ const UserLayout = () => {
         </Row>
       </Col>
     </Row>
+    <FooterUserLayoutAudioPlayer/>
+    </>
   );
 }
 
