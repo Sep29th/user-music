@@ -1,0 +1,16 @@
+.song-item-list-a:hover{
+    background-color: #f2f2f2 !important;
+}
+
+.btn-song-of-playlist:hover{
+    color: #31c27c !important;
+    border-color: #31c27c !important;
+}
+.btn-song-of-playlist{
+    display: flex;
+    align-items: center;
+}
+
+.display-name-song-of-playlist{
+    color: #222222 !important;
+}

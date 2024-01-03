@@ -1,0 +1,21 @@
+.title-song{
+    margin: 0 !important
+}
+
+.ant-card-meta-title{
+    margin: 0 !important
+}
+
+.btn-play-song:hover{
+    color: #31c27c !important;
+    border-color: #31c27c !important;
+}
+
+.hover-add-to-queue:hover{
+    background-color: #cccccc;
+    cursor: pointer;
+}
+
+.ant-popover-inner{
+    padding: 4px !important;
+}

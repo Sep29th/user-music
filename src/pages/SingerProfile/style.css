@@ -1,0 +1,51 @@
+.song-item-list-a:hover{
+    background-color: #f2f2f2 !important;
+}
+
+.btn-song-of-playlist:hover{
+    color: #fff !important;
+    border-color: #31c27c !important;
+    background-color: #31c27c;
+
+}
+.btn-song-of-playlist{
+    display: flex;
+    align-items: center;
+    color: #31c27c;
+}
+
+.display-name-song-of-playlist{
+    color: #222222 !important;
+}
+
+:where(.css-dev-only-do-not-override-1adbn6x).ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #31c27c !important;
+  }
+  
+  .ant-tabs-ink-bar {
+    border-bottom: 2px solid #31c27c !important;
+  }
+
+  .ant-tabs-nav .ant-tabs-tab-active {
+    color: #31c27c;
+  }
+  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #31c27c !important;
+    font-weight: 500;
+  }
+  .ant-tabs-ink-bar {
+    position: absolute;
+    background: #31c27c;
+    pointer-events: none;
+  }
+  .ant-tabs-tab:hover {
+    color: #31c27c !important;
+  }
+  .ant-tabs-tab-active {
+    color: #31c27c !important;
+  }
+  
+  /* .custom-tab {
+    height: fit-content;
+    color: #31c27c;
+  } */
