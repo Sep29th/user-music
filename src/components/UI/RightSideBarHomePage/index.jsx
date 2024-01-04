@@ -29,10 +29,11 @@ const RightSideBarHomePage = () => {
     loadMoreData();
   }, []);
   return (
-    <>
+    <div style={{position: "sticky", top: "15px"}}>
       <Search
         placeholder="Search"
         onSearch={onSearch}
+        size={"large"}
         style={{ width: "100%" }}
       />
       <br />
@@ -42,15 +43,15 @@ const RightSideBarHomePage = () => {
       <div
         id="scrollableDiv"
         style={{
-          height: 220,
+          height: 300,
           overflow: "auto",
           padding: "0 16px",
           border: "1px solid rgba(140, 140, 140, 0.35)",
         }}
       >
         <InfiniteScroll
+          className={"rightSidebarScroll"}
           dataLength={data.length}
-          //next={loadMoreData}
           hasMore={data.length < 50}
           loader={
             <Skeleton
@@ -92,13 +93,14 @@ const RightSideBarHomePage = () => {
       <div
         id="scrollableDiv"
         style={{
-          height: 220,
+          height: 300,
           overflow: "auto",
           padding: "0 16px",
           border: "1px solid rgba(140, 140, 140, 0.35)",
         }}
       >
         <InfiniteScroll
+          className={"rightSidebarScroll"}
           dataLength={data.length}
           //next={loadMoreData}
           hasMore={data.length < 50}
@@ -121,6 +123,8 @@ const RightSideBarHomePage = () => {
                 <List.Item.Meta
                   avatar={
                     <Avatar
+                      shape={"square"}
+                      size={"large"}
                       src={
                         "https://w7.pngwing.com/pngs/365/675/png-transparent-spotify-playlist-things-to-ruin-the-songs-of-joe-iconis-original-cast-recording-be-more-chill-black-and-white-spotify-logo-area-symbol-spotify.png"
                       }
@@ -135,7 +139,7 @@ const RightSideBarHomePage = () => {
           />
         </InfiniteScroll>
       </div>
-    </>
+    </div>
   );
 };
 export default RightSideBarHomePage;

@@ -1,16 +1,30 @@
-.song-item-list-a:hover{
-    background-color: #f2f2f2 !important;
+.song-item-list-a:hover {
+  background-color: #f2f2f2 !important;
 }
 
-.btn-song-of-playlist:hover{
-    color: #31c27c !important;
-    border-color: #31c27c !important;
-}
-.btn-song-of-playlist{
-    display: flex;
-    align-items: center;
+.song-item-list-a {
+  border-bottom: 1px solid #f2f2f2 !important;
 }
 
-.display-name-song-of-playlist{
-    color: #222222 !important;
+.btn-song-of-playlist:hover {
+  color: #31c27c !important;
+  border-color: #31c27c !important;
+}
+
+.btn-song-of-playlist {
+  display: flex;
+  align-items: center;
+}
+
+.display-name-song-of-playlist {
+  color: #222222 !important;
+  font-size: 18px;
+}
+
+.display-name-song-of-playlist:hover {
+  color: #31c27c !important;
+}
+
+.display-name-singer-of-playlist:hover {
+  text-decoration: underline;
 }

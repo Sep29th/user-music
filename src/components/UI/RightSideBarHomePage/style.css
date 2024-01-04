@@ -2,17 +2,17 @@
     border: 0 !important;
 }
 
-::-webkit-scrollbar {
+#scrollableDiv::-webkit-scrollbar {
     width: 10px;
 }
 
-::-webkit-scrollbar-track {
+#scrollableDiv::-webkit-scrollbar-track {
     border-radius: 8px;
     background-color: #e7e7e7;
     border: 1px solid #cacaca;
 }
 
-::-webkit-scrollbar-thumb {
+#scrollableDiv::-webkit-scrollbar-thumb {
     border-radius: 8px;
     background-color: #31c27c;
 }

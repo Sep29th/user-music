@@ -17,6 +17,7 @@ const CardAlbumOfSinger = () => (
       marginBottom: 16,
       overflow: "hidden",
       boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
+      cursor: "pointer"
     }}
     size="large"
     cover={
