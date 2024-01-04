@@ -17,7 +17,7 @@ const CardAlbumOfSinger = () => (
       marginBottom: 16,
       overflow: "hidden",
       boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
-      cursor: "pointer"
+      cursor: "pointer",
     }}
     size="large"
     cover={
@@ -26,7 +26,7 @@ const CardAlbumOfSinger = () => (
       >
         <img
           alt="example"
-          src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+          src="https://s3-alpha.figma.com/hub/file/2734964093/9f5edc36-eb4d-414a-8447-10514f2bc224-cover.png"
           style={{
             width: 128,
             height: 128,

@@ -1,11 +1,11 @@
-import {Avatar, Button, Col, List, Row, Tooltip} from "antd";
-import {FaHeart, FaPlay} from "react-icons/fa";
-import {MdQueuePlayNext} from "react-icons/md";
-import {IoMdPlay} from "react-icons/io";
-import {PiQueueFill} from "react-icons/pi";
+import { Avatar, Button, Col, List, Row, Tooltip } from "antd";
+import { FaHeart, FaPlay } from "react-icons/fa";
+import { MdQueuePlayNext } from "react-icons/md";
+import { IoMdPlay } from "react-icons/io";
+import { PiQueueFill } from "react-icons/pi";
 
 import "./style.css";
-import {useState} from "react";
+import { useState } from "react";
 
 const ListSongOfPlaylist = () => {
   const [showButton, setShowButton] = useState(false);
@@ -58,7 +58,7 @@ const ListSongOfPlaylist = () => {
               height: 380,
             }}
           >
-            <Row style={{height: "100%"}} justify="space-between">
+            <Row style={{ height: "100%" }} justify="space-between">
               <Col
                 span={16}
                 style={{
@@ -68,12 +68,20 @@ const ListSongOfPlaylist = () => {
                   justifyContent: "space-between",
                 }}
               >
-                <div style={{display: "flex"}}>
-                  <Tooltip placement={"top"} color={"#fff"} title={<span style={{color: "#222222"}}>Play all songs now</span>}>
+                <div style={{ display: "flex" }}>
+                  <Tooltip
+                    placement={"top"}
+                    color={"#fff"}
+                    title={
+                      <span style={{ color: "#222222" }}>
+                        Play all songs now
+                      </span>
+                    }
+                  >
                     <Button
                       className="btn-play-song"
                       shape="circle"
-                      icon={<FaPlay style={{fontSize: 32}}/>}
+                      icon={<FaPlay style={{ fontSize: 32 }} />}
                       size="large"
                       style={{
                         padding: 30,
@@ -116,19 +124,19 @@ const ListSongOfPlaylist = () => {
                     }}
                   >
                     <span
-                      style={{color: "#fff", fontSize: 36, fontWeight: 500}}
+                      style={{ color: "#fff", fontSize: 36, fontWeight: 500 }}
                     >
                       25
                     </span>
-                    <br/>
-                    <span style={{color: "#fff", fontSize: 18}}>TRACKS</span>
+                    <br />
+                    <span style={{ color: "#fff", fontSize: 18 }}>TRACKS</span>
                   </div>
 
                   <Button
                     className={"btn-song-of-playlist"}
-                    style={{display: "flex", gap: 10, alignItems: "center"}}
+                    style={{ display: "flex", gap: 10, alignItems: "center" }}
                   >
-                    <MdQueuePlayNext/>
+                    <MdQueuePlayNext />
                     Add to next up
                   </Button>
                 </div>
@@ -179,13 +187,19 @@ const ListSongOfPlaylist = () => {
                           justifyContent: "space-between",
                         }}
                       >
-                        <a href="" className="display-name-song-of-playlist">
-                          {"song name"}
+                        <div>
+                          <a href="" className="display-name-song-of-playlist">
+                            {"song name"}
+                          </a>
                           {" - "}
-                          <a className="display-name-singer-of-playlist" style={{color: "#999999", fontWeight: "300"}}>
+                          <a
+                            href=""
+                            className="display-name-singer-of-playlist"
+                            style={{ color: "#999999", fontWeight: "300" }}
+                          >
                             {"singer name"}
                           </a>
-                        </a>
+                        </div>
 
                         <div
                           style={{
@@ -193,33 +207,51 @@ const ListSongOfPlaylist = () => {
                             gap: 10,
                           }}
                         >
-                          <Tooltip placement="bottomRight" title={<span style={{color: "#222222"}}>Play now</span>} color={"#fff"}>
-                            <Button
-                              size={"small"}
-                              className="btn-song-of-playlist"
-                            >
-                              <IoMdPlay/>
-                            </Button>
-                          </Tooltip>
-                          <Tooltip placement="bottom" title={<span style={{color: "#222222"}}>Like this song</span>} color={"#fff"}>
-                            <Button
-                              size={"small"}
-                              className="btn-song-of-playlist"
-                            >
-                              <FaHeart/>
-                            </Button>
-                          </Tooltip>
-
                           <Tooltip
-                            placement="bottomLeft"
-                            title={<span style={{color: "#222222"}}>Add to queue</span>}
+                            placement="bottomRight"
+                            title={
+                              <span style={{ color: "#222222" }}>Play now</span>
+                            }
                             color={"#fff"}
                           >
                             <Button
                               size={"small"}
                               className="btn-song-of-playlist"
                             >
-                              <PiQueueFill/>
+                              <IoMdPlay />
+                            </Button>
+                          </Tooltip>
+                          <Tooltip
+                            placement="bottom"
+                            title={
+                              <span style={{ color: "#222222" }}>
+                                Like this song
+                              </span>
+                            }
+                            color={"#fff"}
+                          >
+                            <Button
+                              size={"small"}
+                              className="btn-song-of-playlist"
+                            >
+                              <FaHeart />
+                            </Button>
+                          </Tooltip>
+
+                          <Tooltip
+                            placement="bottomLeft"
+                            title={
+                              <span style={{ color: "#222222" }}>
+                                Add to queue
+                              </span>
+                            }
+                            color={"#fff"}
+                          >
+                            <Button
+                              size={"small"}
+                              className="btn-song-of-playlist"
+                            >
+                              <PiQueueFill />
                             </Button>
                           </Tooltip>
                         </div>

@@ -8,7 +8,14 @@ import { MdOutlineQueueMusic } from "react-icons/md";
 
 const CardItemSongHomepage = () => {
   return (
-    <div style={{borderRadius: "9px", padding: "15px", backgroundColor: "#f2f2f2", marginRight: "58px"}}>
+    <div
+      style={{
+        borderRadius: "9px",
+        padding: "15px",
+        backgroundColor: "#f2f2f2",
+        marginRight: "64px",
+      }}
+    >
       <Card
         bodyStyle={{ padding: 2 }}
         bordered={true}
@@ -33,7 +40,14 @@ const CardItemSongHomepage = () => {
               shape="circle"
               icon={<FaPlay />}
               size="large"
-              style={{ marginTop: -52, marginLeft: 12, zIndex: "999 !important", display: "flex", alignItems: "center", justifyContent: "center" }}
+              style={{
+                marginTop: -52,
+                marginLeft: 12,
+                zIndex: "999 !important",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             />
           </>
         }

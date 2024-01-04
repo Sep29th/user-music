@@ -1,5 +1,5 @@
 import { Avatar, Button, Col, List, Row, Skeleton, Statistic } from "antd";
-import { FaPlay } from "react-icons/fa";
+import { FaClock, FaPlay } from "react-icons/fa";
 import { MdQueuePlayNext } from "react-icons/md";
 import { Tabs } from "antd";
 import { LikeOutlined } from "@ant-design/icons";
@@ -13,11 +13,15 @@ import { SlUserUnfollow } from "react-icons/sl";
 
 import { SlUserFollow } from "react-icons/sl";
 import { RiUserFollowLine } from "react-icons/ri";
+import { SiGmail } from "react-icons/si";
+import { FaLink } from "react-icons/fa";
 
 import "./style.css";
 import { useState } from "react";
 import TracksOfSinger from "../../components/UI/TracksOfSinger";
 import AlbumsOfSinger from "../../components/UI/AlbumsOfSinger";
+import CardPlaylistOfSinger from "../../components/UI/CardPlaylistOfSinger";
+import PlaylistOfSinger from "../../components/UI/PlaylistOfSinger";
 const SingerProfile = () => {
   const [follow, setFollow] = useState(false);
   const data = [
@@ -76,7 +80,7 @@ const SingerProfile = () => {
     {
       key: "3",
       label: "Playlist",
-      children: "Content of Tab Pane 3",
+      children: <PlaylistOfSinger />,
     },
   ];
 
@@ -215,6 +219,70 @@ const SingerProfile = () => {
             </Col>
             <Col span={8}>
               <Statistic title="Tracks" value={20} />
+            </Col>
+
+            <Col span={24}>
+              <hr />
+              <h3>About: </h3>
+              <p>
+                This is Juice WRLD's official channel. Chicago-area hip-hop
+                musician Juice WRLD delivers introspective lyrics atop melodic
+                production, echoing Travis Scott and Post Malone.
+                <br /> <br />
+                Born Jarad Higgins in 1998, the Calumet Park artist grew up
+                playing piano, drums, and guitar, turning to rap freestyling in
+                high school. Influenced by rock music and Chicago drill from Lil
+                Durk and Chief Keef, Higgins began recording as Juice TheKidd, a
+                moniker derived from his haircut, which resembled 2Pac's in the
+                film Juice. His early tracks were all posted online, leading up
+                to 2017's Juice WRLD 999 EP. <br /> <br />
+                Produced by Nick Mira and Sidepce, the set included the singles
+                "Lucid Dreams (Forget Me)" and "All Girls Are the Same". Both
+                tracks would also land on his official debut full-length album,
+                Goodbye & Good Riddance, which peaked at number 15 on the
+                Billboard 200 upon release in May 2018.
+              </p>
+            </Col>
+
+            <Col span={24}>
+              <hr />
+              <div
+                style={{
+                  marginTop: 16,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 24,
+                }}
+              >
+                <a
+                  className="singer-profile-link"
+                  href="mailto:{email}"
+                  style={{ display: "flex", alignItems: "center", gap: 8 }}
+                >
+                  <SiGmail fontSize={28} />{" "}
+                  <span style={{ fontSize: 20 }}>
+                    Mail - {"email@example.com"}
+                  </span>
+                </a>
+                <a
+                  className="singer-profile-link"
+                  style={{ display: "flex", alignItems: "center", gap: 8 }}
+                >
+                  <FaLink fontSize={28} />{" "}
+                  <span style={{ fontSize: 20 }}>
+                    Social link - {"http://link.com"}
+                  </span>
+                </a>
+                <a
+                  className="singer-profile-link"
+                  style={{ display: "flex", alignItems: "center", gap: 8 }}
+                >
+                  <FaClock fontSize={28} />{" "}
+                  <span style={{ fontSize: 20 }}>
+                    Joined at: {"dd-mm-yyyy"}
+                  </span>
+                </a>
+              </div>
             </Col>
           </Row>
         </Col>

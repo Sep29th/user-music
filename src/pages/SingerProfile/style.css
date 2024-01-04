@@ -44,8 +44,10 @@
   .ant-tabs-tab-active {
     color: #31c27c !important;
   }
-  
-  /* .custom-tab {
-    height: fit-content;
-    color: #31c27c;
-  } */
+
+  .singer-profile-link{
+    color: #2c2c2c;
+  }
+  .singer-profile-link:hover{
+    color: #31c27c !important;
+  }
