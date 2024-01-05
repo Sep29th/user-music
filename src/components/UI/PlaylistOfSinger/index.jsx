@@ -4,14 +4,11 @@ import CardPlaylistOfSinger from "../CardPlaylistOfSinger";
 const PlaylistOfSinger = () => {
   return (
     <>
-      <Row gutter={[20, 20]}>
+      <Row gutter={[20, 20]} justify={"center"}>
         {[...Array(10)].map(() => {
           return (
             <>
               <CardPlaylistOfSinger />
-              <br />
-              <hr />
-              <br />
             </>
           );
         })}

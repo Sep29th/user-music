@@ -3,6 +3,7 @@ import { FaHeart } from "react-icons/fa";
 import { IoMdPlay } from "react-icons/io";
 import { PiQueueFill } from "react-icons/pi";
 import InfiniteScroll from "react-infinite-scroll-component";
+import './style.css';
 
 const data = [
   {
@@ -69,7 +70,7 @@ const CardPlaylistOfSinger = () => {
             marginLeft: 16,
           }}
         >
-          <Tooltip placement="bottomRight" title={"Play all"}>
+          <Tooltip placement="bottomRight" title={"Play all now"}>
             <Button
               shape="circle"
               size={"large"}
@@ -100,7 +101,7 @@ const CardPlaylistOfSinger = () => {
           </Tooltip>
         </div>
 
-        <div style={{ marginTop: 12 }}>
+        <div style={{ marginTop: 12 }} id={"scrollableDiv"}>
           <InfiniteScroll
             className={"rightSidebarScroll"}
             dataLength={data.length}
@@ -123,7 +124,7 @@ const CardPlaylistOfSinger = () => {
               size="small"
               itemLayout="horizontal"
               dataSource={data}
-              renderItem={(item, index) => (
+              renderItem={() => (
                 <a className="song-item-list-a">
                   <List.Item className="song-item-list-a">
                     <List.Item.Meta
@@ -148,7 +149,7 @@ const CardPlaylistOfSinger = () => {
                           >
                             {"song name"}
                             {" - "}
-                            <span style={{ color: "#999999" }}>
+                            <span style={{ color: "#999999", fontWeight: "300" }}>
                               {"singer name"}
                             </span>
                           </a>
@@ -200,6 +201,9 @@ const CardPlaylistOfSinger = () => {
             />
           </InfiniteScroll>
         </div>
+      </Col>
+      <Col span={22}>
+        <Divider plain></Divider>
       </Col>
     </>
   );
