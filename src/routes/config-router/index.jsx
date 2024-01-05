@@ -5,6 +5,7 @@ import UserLayout from "../../components/layouts/UserLayout/index.jsx";
 import Home from "../../pages/Home/index.jsx";
 import ListSongOfPlaylist from "../../pages/ListSongOfPlaylist/index.jsx";
 import SingerProfile from "../../pages/SingerProfile/index.jsx";
+import Library from "../../pages/Library/index.jsx";
 
 export const configRouters = [
   {
@@ -34,6 +35,10 @@ export const configRouters = [
       {
         path: "/singer-profile",
         element: <SingerProfile />,
+      },
+      {
+        path: "/library",
+        element: <Library />,
       },
     ],
   },

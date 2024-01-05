@@ -3,7 +3,8 @@ import { FaHeart } from "react-icons/fa";
 import { IoMdPlay } from "react-icons/io";
 import { PiQueueFill } from "react-icons/pi";
 import InfiniteScroll from "react-infinite-scroll-component";
-import './style.css';
+import "./style.css";
+import GroupButtonOfSongItem from "../GroupButtonOfSongItem";
 
 const data = [
   {
@@ -149,7 +150,9 @@ const CardPlaylistOfSinger = () => {
                           >
                             {"song name"}
                             {" - "}
-                            <span style={{ color: "#999999", fontWeight: "300" }}>
+                            <span
+                              style={{ color: "#999999", fontWeight: "300" }}
+                            >
                               {"singer name"}
                             </span>
                           </a>
@@ -160,37 +163,7 @@ const CardPlaylistOfSinger = () => {
                               gap: 10,
                             }}
                           >
-                            <Tooltip placement="left" title={"Play now"}>
-                              <Button
-                                size={"small"}
-                                className="btn-song-of-playlist"
-                              >
-                                <IoMdPlay />
-                              </Button>
-                            </Tooltip>
-                            {/* <Tooltip
-                              placement="bottom"
-                              title={"Like this song"}
-                            >
-                              <Button
-                                size={"small"}
-                                className="btn-song-of-playlist"
-                              >
-                                <FaHeart />
-                              </Button>
-                            </Tooltip>
-
-                            <Tooltip
-                              placement="bottomLeft"
-                              title={"Add to queue"}
-                            >
-                              <Button
-                                size={"small"}
-                                className="btn-song-of-playlist"
-                              >
-                                <PiQueueFill />
-                              </Button>
-                            </Tooltip> */}
+                            <GroupButtonOfSongItem />
                           </div>
                         </div>
                       }

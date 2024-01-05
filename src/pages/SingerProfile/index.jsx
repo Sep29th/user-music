@@ -223,8 +223,8 @@ const SingerProfile = () => {
 
             <Col span={24}>
               <hr />
-              <h3>About: </h3>
-              <p>
+              <h2>About: </h2>
+              <p style={{ fontSize: 17 }}>
                 This is Juice WRLD's official channel. Chicago-area hip-hop
                 musician Juice WRLD delivers introspective lyrics atop melodic
                 production, echoing Travis Scott and Post Malone.

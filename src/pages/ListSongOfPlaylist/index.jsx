@@ -6,6 +6,7 @@ import { PiQueueFill } from "react-icons/pi";
 
 import "./style.css";
 import { useState } from "react";
+import GroupButtonOfSongItem from "../../components/UI/GroupButtonOfSongItem";
 
 const ListSongOfPlaylist = () => {
   const [showButton, setShowButton] = useState(false);
@@ -207,53 +208,7 @@ const ListSongOfPlaylist = () => {
                             gap: 10,
                           }}
                         >
-                          <Tooltip
-                            placement="bottomRight"
-                            title={
-                              <span style={{ color: "#222222" }}>Play now</span>
-                            }
-                            color={"#fff"}
-                          >
-                            <Button
-                              size={"small"}
-                              className="btn-song-of-playlist"
-                            >
-                              <IoMdPlay />
-                            </Button>
-                          </Tooltip>
-                          <Tooltip
-                            placement="bottom"
-                            title={
-                              <span style={{ color: "#222222" }}>
-                                Like this song
-                              </span>
-                            }
-                            color={"#fff"}
-                          >
-                            <Button
-                              size={"small"}
-                              className="btn-song-of-playlist"
-                            >
-                              <FaHeart />
-                            </Button>
-                          </Tooltip>
-
-                          <Tooltip
-                            placement="bottomLeft"
-                            title={
-                              <span style={{ color: "#222222" }}>
-                                Add to queue
-                              </span>
-                            }
-                            color={"#fff"}
-                          >
-                            <Button
-                              size={"small"}
-                              className="btn-song-of-playlist"
-                            >
-                              <PiQueueFill />
-                            </Button>
-                          </Tooltip>
+                          <GroupButtonOfSongItem />
                         </div>
                       </div>
                     }
