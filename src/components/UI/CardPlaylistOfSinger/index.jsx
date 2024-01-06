@@ -107,7 +107,7 @@ const CardPlaylistOfSinger = () => {
             className={"rightSidebarScroll"}
             dataLength={data.length}
             //next={loadMoreData}
-            height={300}
+            height={200}
             hasMore={data.length < 50}
             loader={
               <Skeleton

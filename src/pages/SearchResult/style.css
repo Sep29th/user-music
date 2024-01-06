@@ -1,0 +1,15 @@
+/* CSS */
+.ant-tabs-left-bar {
+    background-color: #f0f0f0; /* Màu nền của thanh tabs khi tabPosition là left */
+  }
+  
+  .ant-tabs-left-bar .ant-tabs-tab {
+    color: #333; /* Màu chữ của các tabs khi tabPosition là left */
+  }
+  
+  /* Thay đổi màu chữ khi được chọn */
+  .ant-tabs-left-bar .ant-tabs-tab-active {
+    color: #fff; /* Màu chữ của tab đang được chọn khi tabPosition là left */
+    border-left: 2px solid #31c27c;/* Màu nền của tab đang được chọn khi tabPosition là left */
+  }
+ 

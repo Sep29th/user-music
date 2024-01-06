@@ -6,6 +6,7 @@ import { IoMdPlay } from "react-icons/io";
 import { FaHeart } from "react-icons/fa";
 import { PiQueueFill } from "react-icons/pi";
 import GroupButtonOfSongItem from "../GroupButtonOfSongItem";
+import CardSongItem from "../CardSongItem";
 const data = Array.from({
   length: 23,
 }).map((_, i) => ({
@@ -70,47 +71,7 @@ const TracksOfSinger = () => {
             size="small"
             itemLayout="horizontal"
             dataSource={data}
-            renderItem={(item, index) => (
-              <a className="song-item-list-a">
-                <List.Item className="song-item-list-a">
-                  <List.Item.Meta
-                    avatar={
-                      <Avatar
-                        size={"large"}
-                        shape="square"
-                        src={`https://d21buns5ku92am.cloudfront.net/26628/images/419679-1x1_SoundCloudLogo_cloudmark-f5912b-large-1645807040.jpg`}
-                      />
-                    }
-                    title={
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <a href="" className="display-name-song-of-playlist">
-                          {"song name"}
-                          {" - "}
-                          <span style={{ color: "#999999" }}>
-                            {"singer name"}
-                          </span>
-                        </a>
-
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: 10,
-                          }}
-                        >
-                          <GroupButtonOfSongItem />
-                        </div>
-                      </div>
-                    }
-                    description={"release date: ${date}"}
-                  />
-                </List.Item>
-              </a>
-            )}
+            renderItem={(item, index) => <CardSongItem />}
           />
         </Col>
       </Row>

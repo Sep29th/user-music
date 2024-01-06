@@ -3,6 +3,7 @@ import React from "react";
 import { FaHeart } from "react-icons/fa";
 import { IoMdPlay } from "react-icons/io";
 import { PiQueueFill } from "react-icons/pi";
+import GroupButtonOfSongItem from "../GroupButtonOfSongItem";
 
 const CardSongItem = (props) => {
   const { item, index } = props;
@@ -14,7 +15,7 @@ const CardSongItem = (props) => {
           <List.Item.Meta
             avatar={
               <Avatar
-                size={"small"}
+                size={"large"}
                 shape="square"
                 src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
               />
@@ -46,42 +47,11 @@ const CardSongItem = (props) => {
                     gap: 10,
                   }}
                 >
-                  <Tooltip
-                    placement="bottomRight"
-                    title={<span style={{ color: "#222222" }}>Play now</span>}
-                    color={"#fff"}
-                  >
-                    <Button size={"small"} className="btn-song-of-playlist">
-                      <IoMdPlay />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip
-                    placement="bottom"
-                    title={
-                      <span style={{ color: "#222222" }}>Like this song</span>
-                    }
-                    color={"#fff"}
-                  >
-                    <Button size={"small"} className="btn-song-of-playlist">
-                      <FaHeart />
-                    </Button>
-                  </Tooltip>
-
-                  <Tooltip
-                    placement="bottomLeft"
-                    title={
-                      <span style={{ color: "#222222" }}>Add to queue</span>
-                    }
-                    color={"#fff"}
-                  >
-                    <Button size={"small"} className="btn-song-of-playlist">
-                      <PiQueueFill />
-                    </Button>
-                  </Tooltip>
+                  <GroupButtonOfSongItem />
                 </div>
               </div>
             }
-            //description={"singer: name"}
+            description={"release date: ${date}"}
           />
         </List.Item>
       </a>

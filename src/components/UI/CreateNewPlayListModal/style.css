@@ -1,0 +1,8 @@
+:where(.css-dev-only-do-not-override-p7e5j5).ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
+    border-color: #31c27c;
+    background-color: #31c27c;
+}
+
+:where(.css-dev-only-do-not-override-p7e5j5).ant-list-sm .ant-list-item{
+    padding: 5px;
+}

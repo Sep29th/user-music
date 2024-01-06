@@ -6,6 +6,8 @@ import Home from "../../pages/Home/index.jsx";
 import ListSongOfPlaylist from "../../pages/ListSongOfPlaylist/index.jsx";
 import SingerProfile from "../../pages/SingerProfile/index.jsx";
 import Library from "../../pages/Library/index.jsx";
+import SearchResult from "../../pages/SearchResult/index.jsx";
+import DetailInfoMation from "../../pages/DetailInformation/index.jsx";
 
 export const configRouters = [
   {
@@ -39,6 +41,14 @@ export const configRouters = [
       {
         path: "/library",
         element: <Library />,
+      },
+      {
+        path: "/search-result",
+        element: <SearchResult />,
+      },
+      {
+        path: "/detail-information",
+        element: <DetailInfoMation />,
       },
     ],
   },
