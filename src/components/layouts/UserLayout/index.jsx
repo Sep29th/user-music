@@ -20,36 +20,15 @@ const UserLayout = () => {
         </a>
       ),
     },
+
     {
       key: "2",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com"
-        >
-          2nd menu item (disabled)
-        </a>
-      ),
-      disabled: true,
-    },
-    {
-      key: "3",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.luohanacademy.com"
-        >
-          3rd menu item (disabled)
-        </a>
-      ),
-      disabled: true,
-    },
-    {
-      key: "4",
       danger: true,
-      label: "a danger item",
+      label: (
+        <a rel="noopener noreferrer" onClick={() => navigate("/login")}>
+          Sign out
+        </a>
+      ),
     },
   ];
   return (
@@ -110,7 +89,7 @@ const UserLayout = () => {
               >
                 <NavLink
                   className={"Header__nav"}
-                  to={"/for-artist"}
+                  to={"/for-singer"}
                   style={{
                     color: "white",
                     fontSize: "15px",

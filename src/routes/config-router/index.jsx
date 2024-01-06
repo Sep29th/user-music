@@ -8,6 +8,7 @@ import SingerProfile from "../../pages/SingerProfile/index.jsx";
 import Library from "../../pages/Library/index.jsx";
 import SearchResult from "../../pages/SearchResult/index.jsx";
 import DetailInfoMation from "../../pages/DetailInformation/index.jsx";
+import ForSinger from "../../pages/ForSinger/index.jsx";
 
 export const configRouters = [
   {
@@ -49,6 +50,10 @@ export const configRouters = [
       {
         path: "/detail-information",
         element: <DetailInfoMation />,
+      },
+      {
+        path: "/for-singer",
+        element: <ForSinger />,
       },
     ],
   },
