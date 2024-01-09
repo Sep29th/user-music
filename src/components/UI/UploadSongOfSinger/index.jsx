@@ -76,11 +76,16 @@ const UploadSongOfSinger = () => {
               />
             </Form.Item>
 
-            <Form.Item label="Status">
-              <Radio.Group>
-                <Radio value="public"> Public </Radio>
-                <Radio value="private"> Private </Radio>
-              </Radio.Group>
+            <Form.Item label="Collab Singer">
+              <Select
+                mode="multiple"
+                allowClear
+                style={{
+                  width: "100%",
+                }}
+                placeholder="Please select category"
+                options={options}
+              />
             </Form.Item>
 
             <Form.Item

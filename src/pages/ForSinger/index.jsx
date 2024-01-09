@@ -24,6 +24,7 @@ import {
 import Dragger from "antd/es/upload/Dragger";
 import UploadSongOfSinger from "../../components/UI/UploadSongOfSinger";
 import CreateAlbumOfSinger from "../../components/UI/CreateAlbumOfSinger";
+import ManageTracksOfSinger from "../../components/UI/ManageTracksOfSinger";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
@@ -51,6 +52,18 @@ const items = [
       </a>
     ),
     children: <CreateAlbumOfSinger />,
+  },
+  {
+    key: "3",
+    label: (
+      <a
+        className="tab-label ant-tabs-tab ant-tabs-tab  ant-tabs-tab-btn"
+        style={{ fontSize: 24 }}
+      >
+        Your Tracks
+      </a>
+    ),
+    children: <ManageTracksOfSinger />,
   },
 ];
 
