@@ -1,26 +1,10 @@
-import {
-  Avatar,
-  Button,
-  Col,
-  ConfigProvider,
-  Form,
-  Input,
-  List,
-  Modal,
-  Row,
-  Select,
-  Tooltip,
-  Upload,
-} from "antd";
-import React, { useState } from "react";
-import { FaHeart } from "react-icons/fa";
-import { IoMdPlay } from "react-icons/io";
-import { PiQueueFill } from "react-icons/pi";
-import GroupButtonOfSongItem from "../GroupButtonOfSongItem";
+import {Avatar, Button, Col, ConfigProvider, Form, Input, List, Modal, Row, Select, Upload,} from "antd";
+import {useState} from "react";
 import Dragger from "antd/es/upload/Dragger";
-import { IoCloudUploadOutline } from "react-icons/io5";
-import { PlusOutlined } from "@ant-design/icons";
-import { LuUpload } from "react-icons/lu";
+import {IoCloudUploadOutline} from "react-icons/io5";
+import {PlusOutlined} from "@ant-design/icons";
+import {LuUpload} from "react-icons/lu";
+import {updateSong} from "../../../services/api/song/index.js";
 
 const options = [];
 for (let i = 10; i < 36; i++) {
@@ -37,10 +21,9 @@ const normFile = (e) => {
 };
 
 const CardSongEditOfSinger = (props) => {
-  const { item, index } = props;
+  const {item} = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [requestSend, setRequestSend] = useState(false);
+  const [requestSend, setRequestSend] = useState(item.status);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -50,17 +33,34 @@ const CardSongEditOfSinger = (props) => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const handleSendPending = () => {
+    updateSong({
+      ...item,
+      fileSound: item.fileSong,
+      status: 1
+    });
+  }
   return (
     <>
       <a className="song-item-list-a">
         <List.Item className="song-item-list-a">
           <List.Item.Meta
             avatar={
-              <Avatar
-                size={"large"}
-                shape="square"
-                src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${1}`}
-              />
+              <>{item.avatar ?
+                (
+                  <Avatar
+                    size={"large"}
+                    shape="square"
+                    src={item.avatar}
+                  />
+                ) : (
+                  <Avatar
+                    size={"large"}
+                    shape="square"
+                    src={`https://play-lh.googleusercontent.com/D9X7m5dTNzjeSPxBqzh1RwrZLXJDFTpht9-8W8RJtiaOAlFxNvL5MnSDRxoDnQRYhz0`}
+                  />
+                )
+              }</>
             }
             title={
               <div
@@ -71,14 +71,14 @@ const CardSongEditOfSinger = (props) => {
               >
                 <div>
                   <span className="display-name-song-of-playlist">
-                    {"song name"}
+                    {item.name}
                   </span>
-                  {" - "}
+                  {"   -   "}
                   <span
                     className="display-name-singer-of-playlist"
-                    style={{ color: "#999999", fontWeight: "300" }}
+                    style={{color: "#999999", fontWeight: "300"}}
                   >
-                    {"singer name"}
+                    {item.categories.map(i => i.name).join(", ")}
                   </span>
                 </div>
 
@@ -88,10 +88,9 @@ const CardSongEditOfSinger = (props) => {
                     gap: 10,
                   }}
                 >
-                  {requestSend ? (
+                  {requestSend === 1 ? (
                     <Button
                       disabled
-                      onClick={() => setRequestSend(!requestSend)}
                     >
                       Sent !
                     </Button>
@@ -100,15 +99,19 @@ const CardSongEditOfSinger = (props) => {
                       <Button type="primary" onClick={showModal}>
                         Edit
                       </Button>
-                      <Button onClick={() => setRequestSend(!requestSend)}>
+                      {requestSend === 0 && <Button onClick={() => {
+                        setRequestSend(1);
+                        handleSendPending();
+                      }
+                      }>
                         Send Request
-                      </Button>
+                      </Button>}
                     </>
                   )}
                 </div>
               </div>
             }
-            description={"release date: ${date} - Private"}
+            description={`Status: ${requestSend === 0 ? "Private" : requestSend === 1 ? "Pending" : "Public"}`}
           />
         </List.Item>
       </a>
@@ -117,9 +120,9 @@ const CardSongEditOfSinger = (props) => {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
-        cancelButtonProps={{ style: { display: "none" } }}
-        okButtonProps={{ style: { display: "none" } }}
-        style={{ top: 20 }}
+        cancelButtonProps={{style: {display: "none"}}}
+        okButtonProps={{style: {display: "none"}}}
+        style={{top: 20}}
       >
         <ConfigProvider
           theme={{
@@ -142,7 +145,7 @@ const CardSongEditOfSinger = (props) => {
                 <Form.Item>
                   <Dragger accept="audio/*">
                     <p className="ant-upload-drag-icon">
-                      <IoCloudUploadOutline style={{ fontSize: 60 }} />
+                      <IoCloudUploadOutline style={{fontSize: 60}}/>
                     </p>
                     <p className="ant-upload-text">
                       Click or drag song file to this area to upload
@@ -150,7 +153,7 @@ const CardSongEditOfSinger = (props) => {
                   </Dragger>
                 </Form.Item>
                 <Form.Item label="Name">
-                  <Input />
+                  <Input/>
                 </Form.Item>
                 <Form.Item label="Category">
                   <Select
@@ -189,7 +192,7 @@ const CardSongEditOfSinger = (props) => {
                       }}
                       type="button"
                     >
-                      <PlusOutlined />
+                      <PlusOutlined/>
                       <div
                         style={{
                           marginTop: 8,
@@ -203,14 +206,14 @@ const CardSongEditOfSinger = (props) => {
 
                 <Form.Item label="Upload lyrics" name={"file"}>
                   <Upload accept=".lrc">
-                    <Button icon={<LuUpload />}>
+                    <Button icon={<LuUpload/>}>
                       Click to upload lyrics file
                     </Button>
                   </Upload>
                 </Form.Item>
 
-                <Form.Item style={{ display: "flex", justifyContent: "end" }}>
-                  <div style={{ display: "flex", gap: 10 }}>
+                <Form.Item style={{display: "flex", justifyContent: "end"}}>
+                  <div style={{display: "flex", gap: 10}}>
                     <Button type="primary" htmlType="submit">
                       Update
                     </Button>

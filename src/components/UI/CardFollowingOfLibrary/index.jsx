@@ -1,37 +1,62 @@
-import React, { useState } from "react";
-import { FaHeart, FaPlay } from "react-icons/fa";
+import React, {useEffect, useState} from "react";
 import "./style.css";
-import { Button, Tooltip } from "antd";
-import { PiQueueFill } from "react-icons/pi";
-import { FaHeartBroken } from "react-icons/fa";
-import { SlUserFollow, SlUserUnfollow } from "react-icons/sl";
+import {Button} from "antd";
+import {SlUserFollow, SlUserUnfollow} from "react-icons/sl";
+import {addFollow, getListFollower, removeFollow} from "../../../services/api/singer/index.js";
+import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
-const CardFollowingOfLibrary = () => {
+const CardFollowingOfLibrary = (props) => {
+  const {item} = props;
+  const authInfo = useSelector(state => state.auth);
   const [follow, setFollow] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [follower, setFollower] = useState(null);
+  const navigate = useNavigate();
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
-
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+  useEffect(() => {
+    (async () => {
+      const obj = await getListFollower(item.id);
+      setFollower(obj.content ? obj.content.length : 0);
+    })()
+  }, []);
   return (
     <div
-      style={{ display: "flex", flexDirection: "column", position: "relative" }}
+      style={{display: "flex", flexDirection: "column", position: "relative"}}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <a>
-        <img
-          src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/3e324332910289.569815b93bd38.jpg"
-          style={{
-            width: "100%",
-            aspectRatio: "1/1",
-            objectFit: "cover",
-            borderRadius: "50%",
-          }}
-        />
+        {item.avatar ?
+          (
+            <img
+              src={item.avatar}
+              style={{
+                width: "100%",
+                aspectRatio: "1/1",
+                objectFit: "cover",
+                borderRadius: "50%",
+              }}
+              onClick={() => navigate(`/singer-profile/${item.id}`)}
+            />
+          ) : (
+            <img
+              src="https://chuyentinh.vn/datafiles/img_data/images/am-dao-gia-pussy-6.jpg"
+              style={{
+                width: "100%",
+                aspectRatio: "1/1",
+                objectFit: "cover",
+                borderRadius: "50%",
+              }}
+              onClick={() => navigate(`/singer-profile/${item.id}`)}
+            />
+          )
+        }
       </a>
       <a
         className="display-name-song-of-card-liked-song"
@@ -46,7 +71,7 @@ const CardFollowingOfLibrary = () => {
           textAlign: "center",
         }}
       >
-        <span>Singer name</span>
+        <span onClick={() => navigate(`/singer-profile/${item.id}`)}>{item.name}</span>
       </a>
       <span
         style={{
@@ -61,19 +86,20 @@ const CardFollowingOfLibrary = () => {
           cursor: "default",
         }}
       >
-        {"9999 followers"}
+        {`${follower && follower} followers`}
       </span>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div style={{display: "flex", justifyContent: "center"}}>
         {isHovered ? (
           <>
             {follow ? (
               <Button
                 size="small"
-                style={{ width: "50%" }}
+                style={{width: "50%"}}
                 className="btn-song-of-playlist"
-                icon={<SlUserFollow />}
+                icon={<SlUserFollow/>}
                 onClick={() => {
                   setFollow(!follow);
+                  addFollow(authInfo.id, item.id);
                 }}
               >
                 Follow
@@ -81,11 +107,12 @@ const CardFollowingOfLibrary = () => {
             ) : (
               <Button
                 size="small"
-                style={{ width: "50%" }}
+                style={{width: "50%"}}
                 className="btn-song-of-playlist"
-                icon={<SlUserUnfollow />}
+                icon={<SlUserUnfollow/>}
                 onClick={() => {
                   setFollow(!follow);
+                  removeFollow(authInfo.id, item.id);
                 }}
               >
                 Unfollow
@@ -93,7 +120,7 @@ const CardFollowingOfLibrary = () => {
             )}
           </>
         ) : (
-          <div style={{ height: 24 }}></div>
+          <div style={{height: 24}}></div>
         )}
       </div>
     </div>

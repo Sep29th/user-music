@@ -1,12 +1,17 @@
-import React, { useState } from "react";
-import { FaHeart, FaPlay } from "react-icons/fa";
+import React, {useState} from "react";
+import {FaHeart, FaHeartBroken, FaPlay} from "react-icons/fa";
 import "./style.css";
-import { Button, Tooltip } from "antd";
-import { PiQueueFill } from "react-icons/pi";
-import { FaHeartBroken } from "react-icons/fa";
+import {Button, Tooltip} from "antd";
+import {PiQueueFill} from "react-icons/pi";
+import {useDispatch} from "react-redux";
+import {addOneSong, playOneSongNow} from "../../../redux/actions/songQueue/index.js";
+import {useNavigate} from "react-router-dom";
 
-const CardLikedSong = () => {
+const CardLikedSong = (props) => {
+  const {item} = props;
+  const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -14,23 +19,30 @@ const CardLikedSong = () => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+  const handleAddToQueue = () => {
+    dispatch(addOneSong(item));
+  }
+  const handlePlayNow = () => {
+    dispatch(playOneSongNow(item));
+  }
   return (
     <div
-      style={{ display: "flex", flexDirection: "column", position: "relative" }}
+      style={{display: "flex", flexDirection: "column", position: "relative"}}
     >
       <a onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         {isHovered && (
           <>
             <Tooltip
               placement="top"
-              title={<span style={{ color: "#222222" }}>Play</span>}
+              title={<span style={{color: "#222222"}}>Play</span>}
               color={"#fff"}
             >
               <Button
                 className="btn-play-song"
                 shape="circle"
-                icon={<FaPlay style={{ fontSize: 32 }} />}
+                icon={<FaPlay style={{fontSize: 32}}/>}
                 size="large"
+                onClick={handlePlayNow}
                 style={{
                   padding: 30,
                   display: "flex",
@@ -54,35 +66,48 @@ const CardLikedSong = () => {
               <Tooltip
                 placement="bottom"
                 title={
-                  <span style={{ color: "#222222" }}>Unlike this song</span>
+                  <span style={{color: "#222222"}}>Unlike this song</span>
                 }
                 color={"#fff"}
               >
                 <Button size={"small"} className="btn-song-of-playlist">
-                  <FaHeartBroken />
+                  <FaHeartBroken/>
                 </Button>
               </Tooltip>
 
               <Tooltip
                 placement="bottomLeft"
-                title={<span style={{ color: "#222222" }}>Add to queue</span>}
+                title={<span style={{color: "#222222"}}>Add to queue</span>}
                 color={"#fff"}
               >
-                <Button size={"small"} className="btn-song-of-playlist">
-                  <PiQueueFill />
+                <Button onClick={handleAddToQueue} size={"small"} className="btn-song-of-playlist">
+                  <PiQueueFill/>
                 </Button>
               </Tooltip>
             </div>
           </>
         )}
-        <img
-          src="https://genk.mediacdn.vn/k:thumb_w/640/2015/a-png-1438657076162/nhung-su-that-la-lung-ve-dai-ma-vuong-piccolo-trong-dragon-ball.png"
-          style={{
-            width: "100%",
-            aspectRatio: "1/1",
-            objectFit: "cover",
-          }}
-        />
+        {item.avatar ?
+          (
+            <img
+              src={item.avatar}
+              style={{
+                width: "100%",
+                aspectRatio: "1/1",
+                objectFit: "cover",
+              }}
+            />
+          ) : (
+            <img
+              src="https://play-lh.googleusercontent.com/D9X7m5dTNzjeSPxBqzh1RwrZLXJDFTpht9-8W8RJtiaOAlFxNvL5MnSDRxoDnQRYhz0"
+              style={{
+                width: "100%",
+                aspectRatio: "1/1",
+                objectFit: "cover",
+              }}
+            />
+          )
+        }
       </a>
       <a
         className="display-name-song-of-card-liked-song"
@@ -96,7 +121,7 @@ const CardLikedSong = () => {
           fontSize: 16,
         }}
       >
-        <FaHeart style={{ fontSize: 12 }} /> <span>Song name</span>
+        <FaHeart style={{fontSize: 12}}/> <span onClick={handlePlayNow}>{item.name}</span>
       </a>
       <a
         className="display-name-song-of-card-liked-song"
@@ -110,7 +135,8 @@ const CardLikedSong = () => {
           fontSize: 14,
         }}
       >
-        <span> {"Singername"}</span>
+        <span>{item.singers.map((i, ind) => <span key={ind}
+                                                  onClick={() => navigate(`/singer-profile/${i.id}`)}>{`${i.name } `}</span>)}</span>
       </a>
     </div>
   );

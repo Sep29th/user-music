@@ -1,12 +1,19 @@
-import React, { useState } from "react";
-import { FaHeart, FaPlay } from "react-icons/fa";
+import {useEffect, useState} from "react";
+import {FaPlay} from "react-icons/fa";
 import "./style.css";
-import { Button, Tooltip } from "antd";
-import { PiQueueFill } from "react-icons/pi";
-import { FaHeartBroken } from "react-icons/fa";
+import {Button, Tooltip} from "antd";
+import {PiQueueFill} from "react-icons/pi";
+import {getAllSongByPlaylistId} from "../../../services/api/playlist/index.js";
+import {useNavigate} from "react-router-dom";
+import {addSongList, playListSongNow} from "../../../redux/actions/songQueue/index.js";
+import {useDispatch} from "react-redux";
 
-const CardPlaylistOfLibrary = () => {
+const CardPlaylistOfLibrary = (props) => {
+  const {item} = props;
   const [isHovered, setIsHovered] = useState(false);
+  const [allSong, setAllSong] = useState({});
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -14,23 +21,37 @@ const CardPlaylistOfLibrary = () => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+  const handlePlaylistNow = () => {
+    if (allSong.content)
+      dispatch(playListSongNow(allSong.content));
+  }
+  const handleAddSongList = () => {
+    if (allSong.content)
+      dispatch(addSongList(allSong.content));
+  }
+  useEffect(() => {
+    (async () => {
+      setAllSong((await getAllSongByPlaylistId(item.id)));
+    })()
+  }, []);
   return (
     <div
-      style={{ display: "flex", flexDirection: "column", position: "relative" }}
+      style={{display: "flex", flexDirection: "column", position: "relative"}}
     >
       <a onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         {isHovered && (
           <>
             <Tooltip
               placement="top"
-              title={<span style={{ color: "#222222" }}>Play</span>}
+              title={<span style={{color: "#222222"}}>Play</span>}
               color={"#fff"}
             >
               <Button
                 className="btn-play-song"
                 shape="circle"
-                icon={<FaPlay style={{ fontSize: 32 }} />}
+                icon={<FaPlay style={{fontSize: 32}}/>}
                 size="large"
+                onClick={handlePlaylistNow}
                 style={{
                   padding: 30,
                   display: "flex",
@@ -53,24 +74,37 @@ const CardPlaylistOfLibrary = () => {
             >
               <Tooltip
                 placement="bottomLeft"
-                title={<span style={{ color: "#222222" }}>Add to queue</span>}
+                title={<span style={{color: "#222222"}}>Add to queue</span>}
                 color={"#fff"}
               >
-                <Button size={"small"} className="btn-song-of-playlist">
-                  <PiQueueFill />
+                <Button onClick={handleAddSongList} size={"small"} className="btn-song-of-playlist">
+                  <PiQueueFill/>
                 </Button>
               </Tooltip>
             </div>
           </>
         )}
-        <img
-          src="https://static0.cbrimages.com/wordpress/wp-content/uploads/2023/10/gohan-saiyan-beast.jpg"
-          style={{
-            width: "100%",
-            aspectRatio: "1/1",
-            objectFit: "cover",
-          }}
-        />
+        {allSong.content && allSong.content[0].avatar ?
+          (
+            <img
+              src={allSong[0].avatar}
+              style={{
+                width: "100%",
+                aspectRatio: "1/1",
+                objectFit: "cover",
+              }}
+            />
+          ) : (
+            <img
+              src="https://play-lh.googleusercontent.com/D9X7m5dTNzjeSPxBqzh1RwrZLXJDFTpht9-8W8RJtiaOAlFxNvL5MnSDRxoDnQRYhz0"
+              style={{
+                width: "100%",
+                aspectRatio: "1/1",
+                objectFit: "cover",
+              }}
+            />
+          )
+        }
       </a>
       <a
         className="display-name-song-of-card-liked-song"
@@ -84,22 +118,8 @@ const CardPlaylistOfLibrary = () => {
           fontSize: 16,
         }}
       >
-        <span>Playlist name</span>
+        <span onClick={() => navigate(`/list-song-of-playlist/${item.id}`)}>{item.name}</span>
       </a>
-      <span
-        className="display-name-song-of-card-liked-song"
-        style={{
-          display: "inline-block",
-          width: "100%",
-          whiteSpace: "nowrap",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          color: "#969595",
-          fontSize: 14,
-        }}
-      >
-        {"nameuser"}
-      </span>
     </div>
   );
 };

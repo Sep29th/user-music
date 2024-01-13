@@ -1,9 +1,10 @@
-import { Button, Col, Modal, Row, Tabs, Tooltip } from "antd";
+import {Button, Col, Modal, Row, Tabs, Tooltip} from "antd";
 import CardPlaylistOfLibrary from "../CardPlaylistOfLibrary";
-import { FaPlus } from "react-icons/fa";
-import { PiQueueFill } from "react-icons/pi";
-import { useState } from "react";
+import {FaPlus} from "react-icons/fa";
+import {useEffect, useState} from "react";
 import CreateNewPlaylistModal from "../CreateNewPlayListModal";
+import {useSelector} from "react-redux";
+import {getAllPlaylistByUserId} from "../../../services/api/playlist/index.js";
 
 const items = [
   {
@@ -11,30 +12,37 @@ const items = [
     label: (
       <a
         className="tab-label ant-tabs-tab ant-tabs-tab  ant-tabs-tab-btn"
-        style={{ fontSize: 20 }}
+        style={{fontSize: 20}}
       >
         Create new playlist
       </a>
     ),
-    children: <CreateNewPlaylistModal />,
+    children: <CreateNewPlaylistModal/>,
   },
 ];
 const ListPlaylistOfLibrary = () => {
+  const authInfo = useSelector(state => state.auth);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [listPlaylist, setListPlaylist] = useState([]);
   const handleOk = () => {
     setIsModalOpen(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  useEffect(() => {
+    (async () => {
+      setListPlaylist((await getAllPlaylistByUserId(authInfo.id)).content);
+    })()
+  }, []);
   return (
     <>
       <Row gutter={[15, 40]}>
-        {[...Array(20)].map(() => {
+        {listPlaylist.map((i) => {
           return (
             <>
               <Col span={4}>
-                <CardPlaylistOfLibrary />
+                <CardPlaylistOfLibrary item={i}/>
               </Col>
             </>
           );
@@ -72,7 +80,7 @@ const ListPlaylistOfLibrary = () => {
                   <Button
                     className="btn-song-of-playlist"
                     onClick={() => setIsModalOpen(true)}
-                    icon={<FaPlus style={{ fontSize: 40 }} />}
+                    icon={<FaPlus style={{fontSize: 40}}/>}
                     style={{
                       display: "flex",
                       flex: 1,
@@ -103,7 +111,7 @@ const ListPlaylistOfLibrary = () => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Tabs defaultActiveKey="1" items={items} />
+        <Tabs defaultActiveKey="1" items={items}/>
       </Modal>
     </>
   );

@@ -1,68 +1,16 @@
-import { Avatar, Button, Col, List, Row, Skeleton, Tooltip } from "antd";
-import { FaPlay } from "react-icons/fa";
-import { MdQueuePlayNext } from "react-icons/md";
-import VirtualList from "rc-virtual-list";
-import { IoMdPlay } from "react-icons/io";
-import { FaHeart } from "react-icons/fa";
-import { PiQueueFill } from "react-icons/pi";
-import GroupButtonOfSongItem from "../GroupButtonOfSongItem";
+import {Col, List, Row} from "antd";
 import CardSongItem from "../CardSongItem";
-const data = Array.from({
-  length: 23,
-}).map((_, i) => ({
-  href: "",
-  title: `name song ${i}`,
-  //avatar: `https://api.dicebear.com/7.x/miniavs/svg?seed=${i}`,
-  description: "This is song of ${trackname}",
-  content:
-    "We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.",
-}));
-const IconText = ({ icon, text }) => (
-  <Space>
-    {React.createElement(icon)}
-    {text}
-  </Space>
-);
-const TracksOfSinger = () => {
-  const data = [
-    {
-      title: "Ant Design Title 1",
-    },
-    {
-      title: "Ant Design Title 2",
-    },
-    {
-      title: "Ant Design Title 3",
-    },
-    {
-      title: "Ant Design Title 4",
-    },
-    {
-      title: "Ant Design Title 1",
-    },
-    {
-      title: "Ant Design Title 2",
-    },
-    {
-      title: "Ant Design Title 3",
-    },
-    {
-      title: "Ant Design Title 4",
-    },
-    {
-      title: "Ant Design Title 1",
-    },
-    {
-      title: "Ant Design Title 2",
-    },
-    {
-      title: "Ant Design Title 3",
-    },
-    {
-      title: "Ant Design Title 4",
-    },
-  ];
+import {useEffect, useState} from "react";
+import {getAllSongBySingerId} from "../../../services/api/song/index.js";
 
+const TracksOfSinger = (props) => {
+  const {singerProfile} = props;
+  const [listSong, setListSong] = useState([]);
+  useEffect(() => {
+    (async () => {
+      setListSong((await getAllSongBySingerId(singerProfile.id)).content);
+    })()
+  }, []);
   return (
     <>
       <Row>
@@ -70,8 +18,8 @@ const TracksOfSinger = () => {
           <List
             size="small"
             itemLayout="horizontal"
-            dataSource={data}
-            renderItem={(item, index) => <CardSongItem />}
+            dataSource={listSong}
+            renderItem={(item, index) => <CardSongItem key={index} item={item}/>}
           />
         </Col>
       </Row>

@@ -32,11 +32,11 @@ export const configRouters = [
         element: <Home />,
       },
       {
-        path: "/list-song-of-playlist",
+        path: "/list-song-of-playlist", /* */
         element: <ListSongOfPlaylist />,
       },
       {
-        path: "/singer-profile",
+        path: "/singer-profile/:singerId", /* */
         element: <SingerProfile />,
       },
       {
@@ -44,7 +44,7 @@ export const configRouters = [
         element: <Library />,
       },
       {
-        path: "/search-result",
+        path: "/search-result", /* */
         element: <SearchResult />,
       },
       {

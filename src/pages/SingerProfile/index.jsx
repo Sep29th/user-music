@@ -1,86 +1,52 @@
-import { Avatar, Button, Col, List, Row, Skeleton, Statistic } from "antd";
-import { FaClock, FaPlay } from "react-icons/fa";
-import { MdQueuePlayNext } from "react-icons/md";
-import { Tabs } from "antd";
-import { LikeOutlined } from "@ant-design/icons";
+import {Button, Col, Row, Skeleton, Statistic, Tabs} from "antd";
+import {FaClock, FaLink, FaUser} from "react-icons/fa";
 
-import VirtualList from "rc-virtual-list";
-import { IoMdPlay } from "react-icons/io";
-import { FaHeart } from "react-icons/fa";
-import { PiQueueFill } from "react-icons/pi";
-
-import { SlUserUnfollow } from "react-icons/sl";
-
-import { SlUserFollow } from "react-icons/sl";
-import { RiUserFollowLine } from "react-icons/ri";
-import { SiGmail } from "react-icons/si";
-import { FaLink } from "react-icons/fa";
+import {SlUserFollow, SlUserUnfollow} from "react-icons/sl";
+import {SiGmail} from "react-icons/si";
 
 import "./style.css";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import TracksOfSinger from "../../components/UI/TracksOfSinger";
-import AlbumsOfSinger from "../../components/UI/AlbumsOfSinger";
-import CardPlaylistOfSinger from "../../components/UI/CardPlaylistOfSinger";
-import PlaylistOfSinger from "../../components/UI/PlaylistOfSinger";
-const SingerProfile = () => {
-  const [follow, setFollow] = useState(false);
-  const data = [
-    {
-      title: "Ant Design Title 1",
-    },
-    {
-      title: "Ant Design Title 2",
-    },
-    {
-      title: "Ant Design Title 3",
-    },
-    {
-      title: "Ant Design Title 4",
-    },
-    {
-      title: "Ant Design Title 1",
-    },
-    {
-      title: "Ant Design Title 2",
-    },
-    {
-      title: "Ant Design Title 3",
-    },
-    {
-      title: "Ant Design Title 4",
-    },
-    {
-      title: "Ant Design Title 1",
-    },
-    {
-      title: "Ant Design Title 2",
-    },
-    {
-      title: "Ant Design Title 3",
-    },
-    {
-      title: "Ant Design Title 4",
-    },
-  ];
+import {useNavigate, useParams} from "react-router-dom";
+import {getUserById} from "../../services/api/user/index.js";
+import {getAllSongBySingerId} from "../../services/api/song/index.js";
+import {useSelector} from "react-redux";
+import {getFollowedSinger, getListFollower} from "../../services/api/singer/index.js";
 
-  const onChange = (key) => {
-    console.log(key);
-  };
+const SingerProfile = () => {
+  const {singerId} = useParams();
+  const authInfo = useSelector(state => state.auth);
+  const [follow, setFollow] = useState(false);
+  const [singerProfile, setSingerProfile] = useState({id: singerId});
+  const [totalTrack, setTotalTrack] = useState([]);
+  const [follower, setFollower] = useState({});
+  const [following, setFollowing] = useState({})
+  const navigate = useNavigate();
+  useEffect(() => {
+    (async () => {
+      setSingerProfile((await getUserById(singerId)).content);
+      setTotalTrack((await getAllSongBySingerId(singerId)).content);
+      setFollower(await getListFollower(authInfo.id));
+      setFollowing(await getFollowedSinger(authInfo.id));
+    })()
+  }, []);
   const items = [
     {
       key: "1",
       label: "Tracks",
-      children: <TracksOfSinger />,
+      children: <TracksOfSinger singerProfile={singerProfile}/>,
     },
     {
       key: "2",
       label: "Album",
-      children: <AlbumsOfSinger />,
+      children: <></>
+      // children: <AlbumsOfSinger singerProfile={singerProfile}/>,
     },
     {
       key: "3",
       label: "Playlist",
-      children: <PlaylistOfSinger />,
+      children: <></>
+      // children: <PlaylistOfSinger singerProfile={singerProfile}/>,
     },
   ];
 
@@ -94,7 +60,7 @@ const SingerProfile = () => {
               height: 260,
             }}
           >
-            <Row style={{ height: "100%" }} justify="space-between">
+            <Row style={{height: "100%"}} justify="space-between">
               <Col
                 span={10}
                 style={{
@@ -102,16 +68,30 @@ const SingerProfile = () => {
                   alignItems: "center",
                 }}
               >
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/en/c/cf/Dragon_Ball_The_Path_to_Power.jpg"
-                  style={{
-                    width: 200,
-                    height: 200,
-                    marginRight: 20,
-                    borderRadius: "50%",
-                    margin: "0px 30px 0px 30px",
-                  }}
-                />
+                {singerProfile.avatar ?
+                  (
+                    <img
+                      src={singerProfile.avatar}
+                      style={{
+                        width: 200,
+                        height: 200,
+                        marginRight: 20,
+                        borderRadius: "50%",
+                        margin: "0px 30px 0px 30px",
+                      }}
+                    />
+                  ) : (
+                    <Skeleton
+                      style={{
+                        width: 200,
+                        height: 200,
+                        marginRight: 20,
+                        borderRadius: "50%",
+                        margin: "0px 30px 0px 30px",
+                      }}
+                    />
+                  )
+                }
                 <span
                   style={{
                     padding: 5,
@@ -123,71 +103,49 @@ const SingerProfile = () => {
                     paddingBottom: 120,
                   }}
                 >
-                  Name Singer
-                  <br />
-                  <span style={{ fontSize: 16, fontWeight: 300 }}>
-                    Real name of singer
+                  {singerProfile.name && singerProfile.name}
+                  <br/>
+                  <span style={{fontSize: 16, fontWeight: 300}}>
+                    {singerProfile.nickName && singerProfile.nickName}
                   </span>
-                  <br />
-                  {follow ? (
-                    <Button
-                      className="btn-song-of-playlist"
-                      icon={<SlUserFollow />}
-                      onClick={() => {
-                        setFollow(!follow);
-
-                        console.log("check state: ", follow);
-                      }}
-                    >
-                      Follow
-                    </Button>
-                  ) : (
-                    <Button
-                      className="btn-song-of-playlist"
-                      icon={<SlUserUnfollow />}
-                      onClick={() => {
-                        setFollow(!follow);
-                        console.log("check state: ", follow);
-                      }}
-                    >
-                      Unfollow
-                    </Button>
-                  )}
+                  <br/>
+                  {authInfo.id === parseInt(singerId) ?
+                    (
+                      <Button
+                        className="btn-song-of-playlist"
+                        icon={<FaUser/>}
+                        onClick={() => {
+                          navigate("/detail-information");
+                        }}
+                      >
+                        Your detail profile
+                      </Button>
+                    ) : (
+                      follow ? (
+                        <Button
+                          className="btn-song-of-playlist"
+                          icon={<SlUserFollow/>}
+                          onClick={() => {
+                            setFollow(!follow);
+                          }}
+                        >
+                          Follow
+                        </Button>
+                      ) : (
+                        <Button
+                          className="btn-song-of-playlist"
+                          icon={<SlUserUnfollow/>}
+                          onClick={() => {
+                            setFollow(!follow);
+                          }}
+                        >
+                          Unfollow
+                        </Button>
+                      )
+                    )
+                  }
                 </span>
               </Col>
-              {/* <Col
-                span={16}
-                style={{
-                  padding: 25,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div style={{ display: "flex" }}>
-                  <span
-                    style={{
-                      padding: 5,
-                      marginLeft: 5,
-                      fontSize: 24,
-                      color: "#fff",
-                      fontWeight: 700,
-                      letterSpacing: 1,
-                    }}
-                  >
-                    Name Singer
-                  </span>
-                </div>
-
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "end",
-                    gap: 20,
-                  }}
-                ></div>
-              </Col> */}
             </Row>
           </div>
         </Col>
@@ -198,7 +156,6 @@ const SingerProfile = () => {
             size="large"
             defaultActiveKey="1"
             items={items}
-            onChange={onChange}
           />
         </Col>
         <Col
@@ -212,40 +169,25 @@ const SingerProfile = () => {
         >
           <Row gutter={[15, 0]}>
             <Col span={8}>
-              <Statistic title="Follower" value={4953} />
+              <Statistic title="Follower" value={follower.content ? follower.content.length : 0}/>
             </Col>
             <Col span={8}>
-              <Statistic title="Following" value={1} />
+              <Statistic title="Following" value={following.content ? following.content.length : 0}/>
             </Col>
             <Col span={8}>
-              <Statistic title="Tracks" value={20} />
+              <Statistic title="Tracks" value={totalTrack.length}/>
             </Col>
 
             <Col span={24}>
-              <hr />
+              <hr/>
               <h2>About: </h2>
-              <p style={{ fontSize: 17 }}>
-                This is Juice WRLD's official channel. Chicago-area hip-hop
-                musician Juice WRLD delivers introspective lyrics atop melodic
-                production, echoing Travis Scott and Post Malone.
-                <br /> <br />
-                Born Jarad Higgins in 1998, the Calumet Park artist grew up
-                playing piano, drums, and guitar, turning to rap freestyling in
-                high school. Influenced by rock music and Chicago drill from Lil
-                Durk and Chief Keef, Higgins began recording as Juice TheKidd, a
-                moniker derived from his haircut, which resembled 2Pac's in the
-                film Juice. His early tracks were all posted online, leading up
-                to 2017's Juice WRLD 999 EP. <br /> <br />
-                Produced by Nick Mira and Sidepce, the set included the singles
-                "Lucid Dreams (Forget Me)" and "All Girls Are the Same". Both
-                tracks would also land on his official debut full-length album,
-                Goodbye & Good Riddance, which peaked at number 15 on the
-                Billboard 200 upon release in May 2018.
+              <p style={{fontSize: 17}}>
+                {singerProfile.bio}
               </p>
             </Col>
 
             <Col span={24}>
-              <hr />
+              <hr/>
               <div
                 style={{
                   marginTop: 16,
@@ -256,30 +198,32 @@ const SingerProfile = () => {
               >
                 <a
                   className="singer-profile-link"
-                  href="mailto:{email}"
-                  style={{ display: "flex", alignItems: "center", gap: 8 }}
+                  href={`mailto:${singerProfile.email && singerProfile.email}`}
+                  style={{display: "flex", alignItems: "center", gap: 8}}
                 >
-                  <SiGmail fontSize={28} />{" "}
-                  <span style={{ fontSize: 20 }}>
+                  <SiGmail fontSize={28}/>{" "}
+                  <span style={{fontSize: 20}}>
                     Mail - {"email@example.com"}
                   </span>
                 </a>
                 <a
                   className="singer-profile-link"
-                  style={{ display: "flex", alignItems: "center", gap: 8 }}
+                  style={{display: "flex", alignItems: "center", gap: 8}}
+                  target="_blank"
+                  href={singerProfile.socialMediaLink && singerProfile.socialMediaLink} rel="noreferrer"
                 >
-                  <FaLink fontSize={28} />{" "}
-                  <span style={{ fontSize: 20 }}>
-                    Social link - {"http://link.com"}
+                  <FaLink fontSize={28}/>{" "}
+                  <span style={{fontSize: 20}}>
+                    Social link - {singerProfile.socialMediaLink && singerProfile.socialMediaLink}
                   </span>
                 </a>
                 <a
                   className="singer-profile-link"
-                  style={{ display: "flex", alignItems: "center", gap: 8 }}
+                  style={{display: "flex", alignItems: "center", gap: 8, cursor: "default"}}
                 >
-                  <FaClock fontSize={28} />{" "}
-                  <span style={{ fontSize: 20 }}>
-                    Joined at: {"dd-mm-yyyy"}
+                  <FaClock fontSize={28}/>{" "}
+                  <span style={{fontSize: 20}}>
+                    Joined at: {singerProfile.createdDate && singerProfile.createdDate.slice(0, 10)}
                   </span>
                 </a>
               </div>

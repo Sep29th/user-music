@@ -1,12 +1,13 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Col, Dropdown, Row } from "antd";
 import "./UserLLayout.scss";
-import imglogo from "../../../assets/logo.png";
 import { FaCaretDown } from "react-icons/fa";
 import FooterUserLayoutAudioPlayer from "../../UI/FooterUserLayoutAudioPlayer";
+import {useSelector} from "react-redux";
 
 const UserLayout = () => {
   const navigate = useNavigate();
+  const authInfo = useSelector(state => state.auth);
 
   const items = [
     {
@@ -20,9 +21,19 @@ const UserLayout = () => {
         </a>
       ),
     },
-
     {
       key: "2",
+      label: (
+        <a
+          rel="noopener noreferrer"
+          onClick={() => navigate(`/singer-profile/${authInfo.id}`)}
+        >
+          Your wall
+        </a>
+      ),
+    },
+    {
+      key: "3",
       danger: true,
       label: (
         <a rel="noopener noreferrer" onClick={() => navigate("/login")}>
@@ -109,7 +120,7 @@ const UserLayout = () => {
                     }}
                   >
                     <img
-                      src={imglogo}
+                      src={authInfo.avatar}
                       style={{
                         width: "26px",
                         height: "26px",

@@ -1,47 +1,17 @@
-import { Col, Divider, List, Row } from "antd";
-import React from "react";
+import {Col, Divider, List, Row} from "antd";
+import {useEffect, useState} from "react";
 import CardSongEditOfSinger from "../CardSongEditOfSinger";
-
-const data = [
-  {
-    title: "Ant Design Title 1",
-  },
-  {
-    title: "Ant Design Title 2",
-  },
-  {
-    title: "Ant Design Title 3",
-  },
-  {
-    title: "Ant Design Title 4",
-  },
-  {
-    title: "Ant Design Title 1",
-  },
-  {
-    title: "Ant Design Title 2",
-  },
-  {
-    title: "Ant Design Title 3",
-  },
-  {
-    title: "Ant Design Title 4",
-  },
-  {
-    title: "Ant Design Title 1",
-  },
-  {
-    title: "Ant Design Title 2",
-  },
-  {
-    title: "Ant Design Title 3",
-  },
-  {
-    title: "Ant Design Title 4",
-  },
-];
+import {useSelector} from "react-redux";
+import {getAllSongByCreatorId} from "../../../services/api/song/index.js";
 
 const ManageTracksOfSinger = () => {
+  const authInfo = useSelector(state => state.auth);
+  const [listTrack, setListTrack] = useState([]);
+  useEffect(() => {
+    (async () => {
+      setListTrack((await getAllSongByCreatorId(authInfo.id)).content)
+    })()
+  }, []);
   return (
     <>
       <Row>
@@ -49,14 +19,14 @@ const ManageTracksOfSinger = () => {
           <h2>Your tracks</h2>
         </Col>
         <Col span={24}>
-          <Divider />
+          <Divider/>
         </Col>
         <Col span={24}>
           <List
             size="small"
             itemLayout="horizontal"
-            dataSource={data}
-            renderItem={(item, index) => <CardSongEditOfSinger />}
+            dataSource={listTrack}
+            renderItem={(item, index) => <CardSongEditOfSinger item={item} key={index}/>}
           />
         </Col>
       </Row>

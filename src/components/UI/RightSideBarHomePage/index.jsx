@@ -1,32 +1,24 @@
-import { Avatar, Divider, List, Skeleton } from "antd";
+import {Avatar, List} from "antd";
 import Search from "antd/es/input/Search";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import "./style.css";
-const RightSideBarHomePage = () => {
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
+import {getAllPlaylistByUserId} from "../../../services/api/playlist/index.js";
+import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {getFollowedSinger} from "../../../services/api/singer/index.js";
 
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const loadMoreData = () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-    fetch(
-      "https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo"
-    )
-      .then((res) => res.json())
-      .then((body) => {
-        setData([...data, ...body.results]);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  };
+const RightSideBarHomePage = () => {
+  const authInfo = useSelector(state => state.auth);
+  const onSearch = (value, _e, info) => console.log(info?.source, value);
+  const navigate = useNavigate();
+  const [playlist, setPlaylist] = useState({});
+  const [singerFollowed, setSingerFollowed] = useState({});
   useEffect(() => {
-    loadMoreData();
+    (async () => {
+      setPlaylist(await getAllPlaylistByUserId(authInfo.id));
+      setSingerFollowed(await getFollowedSinger(authInfo.id));
+    })()
   }, []);
   return (
     <div style={{position: "sticky", top: "15px"}}>
@@ -34,11 +26,11 @@ const RightSideBarHomePage = () => {
         placeholder="Search"
         onSearch={onSearch}
         size={"large"}
-        style={{ width: "100%" }}
+        style={{width: "100%"}}
       />
-      <br />
-      <br />
-      <hr />
+      <br/>
+      <br/>
+      <hr/>
       <h3>Singer you followed</h3>
       <div
         id="scrollableDiv"
@@ -51,44 +43,37 @@ const RightSideBarHomePage = () => {
       >
         <InfiniteScroll
           className={"rightSidebarScroll"}
-          dataLength={data.length}
-          hasMore={data.length < 50}
-          loader={
-            <Skeleton
-              avatar
-              paragraph={{
-                rows: 1,
-              }}
-              active
-            />
-          }
-          endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+          dataLength={singerFollowed.content ? singerFollowed.content.length : 0}
           scrollableTarget="scrollableDiv"
         >
           <List
-            dataSource={data}
+            dataSource={singerFollowed.content ? singerFollowed.content : []}
             renderItem={(item) => (
-              <List.Item key={item.email}>
+              <List.Item key={item.id}>
                 <List.Item.Meta
                   avatar={
-                    <Avatar
-                      src={
-                        "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
-                      }
-                    />
+                    item.avatar ?
+                      (
+                        <Avatar
+                          src={item.avatar}
+                        />
+                      ) : (
+                        <Avatar
+                          src={"https://bizweb.dktcdn.net/100/399/921/files/am-dao-gia-bay-che-do-pink-purry-2.jpg?v=1632850343690"}
+                        />
+                      )
                   }
-                  title={<a href="">{item.name.last}</a>}
+                  title={<a onClick={() => navigate(`/singer-profile/${item.id}`)}>{item.name}</a>}
                   description={item.email}
                 />
-                <div>Content</div>
               </List.Item>
             )}
           />
         </InfiniteScroll>
       </div>
 
-      <br />
-      <hr />
+      <br/>
+      <hr/>
       <h3>Your Playlist</h3>
       <div
         id="scrollableDiv"
@@ -101,25 +86,13 @@ const RightSideBarHomePage = () => {
       >
         <InfiniteScroll
           className={"rightSidebarScroll"}
-          dataLength={data.length}
-          //next={loadMoreData}
-          hasMore={data.length < 50}
-          loader={
-            <Skeleton
-              avatar
-              paragraph={{
-                rows: 1,
-              }}
-              active
-            />
-          }
-          endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+          dataLength={playlist.content ? playlist.content.length : 0}
           scrollableTarget="scrollableDiv"
         >
           <List
-            dataSource={data}
+            dataSource={playlist.content ? playlist.content : []}
             renderItem={(item) => (
-              <List.Item key={item.email}>
+              <List.Item key={item.id}>
                 <List.Item.Meta
                   avatar={
                     <Avatar
@@ -130,10 +103,9 @@ const RightSideBarHomePage = () => {
                       }
                     />
                   }
-                  title={<a href="">{item.name.last}</a>}
-                  description={item.email}
+                  title={<a onClick={() => navigate(`/list-song-of-playlist/${item.id}`)}>{item.name}</a>}
+                  description={`release date: ${item.createdDate.slice(0, 10)}`}
                 />
-                <div>Content</div>
               </List.Item>
             )}
           />
