@@ -87,7 +87,7 @@ const CardPlaylistOfLibrary = (props) => {
         {allSong.content && allSong.content[0].avatar ?
           (
             <img
-              src={allSong[0].avatar}
+              src={allSong.content[0].avatar}
               style={{
                 width: "100%",
                 aspectRatio: "1/1",

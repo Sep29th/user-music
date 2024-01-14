@@ -3,9 +3,11 @@ import {Col, Row, Tabs,} from "antd";
 import UploadSongOfSinger from "../../components/UI/UploadSongOfSinger";
 import CreateAlbumOfSinger from "../../components/UI/CreateAlbumOfSinger";
 import ManageTracksOfSinger from "../../components/UI/ManageTracksOfSinger";
+import {useState} from "react";
 
 
 const ForSinger = () => {
+  const [reload, setReload] = useState(false);
   const items = [
     {
       key: "1",
@@ -17,7 +19,7 @@ const ForSinger = () => {
           Upload song
         </a>
       ),
-      children: <UploadSongOfSinger/>,
+      children: <UploadSongOfSinger reload={reload} setReload={setReload}/>,
     },
     {
       key: "2",
@@ -41,7 +43,7 @@ const ForSinger = () => {
           Your Tracks
         </a>
       ),
-      children: <ManageTracksOfSinger/>,
+      children: <ManageTracksOfSinger reload={reload}/>,
     },
   ];
   return (

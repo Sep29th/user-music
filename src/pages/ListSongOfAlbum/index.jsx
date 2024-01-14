@@ -1,18 +1,15 @@
 import {Avatar, Button, Col, List, Row, Tooltip} from "antd";
 import {FaPlay} from "react-icons/fa";
 import {MdQueuePlayNext} from "react-icons/md";
-
-import "./style.css";
 import {useEffect, useState} from "react";
 import GroupButtonOfSongItem from "../../components/UI/GroupButtonOfSongItem";
 import {useNavigate, useParams} from "react-router-dom";
 import {getAllSongByPlaylistId, getPlaylistByPlaylistId} from "../../services/api/playlist/index.js";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {addSongList, playListSongNow} from "../../redux/actions/songQueue/index.js";
 
-const ListSongOfPlaylist = () => {
+const ListSongOfAlbum = () => {
   const {playlistId} = useParams();
-  const authInfo = useSelector(state => state.auth);
   const [playlistDetail, setPlaylistDetail] = useState({id: playlistId});
   const [listSongOfPlayList, setListSongOfPlaylist] = useState([]);
   const navigate = useNavigate();
@@ -25,11 +22,8 @@ const ListSongOfPlaylist = () => {
   }
   useEffect(() => {
     (async () => {
-      const data = (await getPlaylistByPlaylistId(playlistId)).content;
-      setPlaylistDetail(data);
-      const data1 = (await getAllSongByPlaylistId(playlistId)).content;
-      if (data.creator?.id === authInfo.id) setListSongOfPlaylist(data1);
-      else setListSongOfPlaylist(data1.filter(i => i.status === 2));
+      setPlaylistDetail((await getPlaylistByPlaylistId(playlistId)).content);
+      setListSongOfPlaylist((await getAllSongByPlaylistId(playlistId)).content);
     })();
   }, [playlistId]);
   return (
@@ -89,6 +83,7 @@ const ListSongOfPlaylist = () => {
                     {playlistDetail.name}
                   </span>
                 </div>
+
                 <div
                   style={{
                     display: "flex",
@@ -169,61 +164,62 @@ const ListSongOfPlaylist = () => {
             itemLayout="horizontal"
             dataSource={listSongOfPlayList}
             renderItem={(item, index) => (
-              <List.Item className="song-item-list-a" key={index}>
-                <List.Item.Meta
-                  avatar={
-                    item.avatar ?
-                      (
-                        <Avatar
-                          size={"small"}
-                          shape="square"
-                          src={item.avatar}
-                        />
-                      ) : (
-                        <Avatar
-                          size={"small"}
-                          shape="square"
-                          src={`https://play-lh.googleusercontent.com/D9X7m5dTNzjeSPxBqzh1RwrZLXJDFTpht9-8W8RJtiaOAlFxNvL5MnSDRxoDnQRYhz0`}
-                        />
-                      )
-                  }
-                  title={
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div>
-                        <a className="display-name-song-of-playlist">
-                          {item.name}
-                        </a>
-                        {" - "}
-                        <a
-                          className="display-name-singer-of-playlist"
-                          style={{color: "#999999", fontWeight: "300"}}
-                        >
-                          {item.singers.map((i, ind) => <span onClick={() => navigate(`/singer-profile/${i.id}`)}
-                                                              key={ind}
-                                                              className={"hover-decoration"}>{`${i.name}, `}</span>)}
-                        </a>
-                      </div>
-
+              <a className="song-item-list-a" key={index}>
+                <List.Item className="song-item-list-a">
+                  <List.Item.Meta
+                    avatar={
+                      item.avatar ?
+                        (
+                          <Avatar
+                            size={"small"}
+                            shape="square"
+                            src={item.avatar}
+                          />
+                        ) : (
+                          <Avatar
+                            size={"small"}
+                            shape="square"
+                            src={`https://play-lh.googleusercontent.com/D9X7m5dTNzjeSPxBqzh1RwrZLXJDFTpht9-8W8RJtiaOAlFxNvL5MnSDRxoDnQRYhz0`}
+                          />
+                        )
+                    }
+                    title={
                       <div
                         style={{
                           display: "flex",
-                          gap: 10,
+                          justifyContent: "space-between",
                         }}
                       >
-                        <GroupButtonOfSongItem
-                          songTarget={item} playlistDetail={playlistDetail}
-                          listSongOfPlayList={listSongOfPlayList}
-                          setListSongOfPlaylist={setListSongOfPlaylist}/>
+                        <div>
+                          <a className="display-name-song-of-playlist">
+                            {item.name}
+                          </a>
+                          {" - "}
+                          <a
+                            className="display-name-singer-of-playlist"
+                            style={{color: "#999999", fontWeight: "300"}}
+                          >
+                            {item.singers.map((i, ind) => <span onClick={() => navigate(`/singer-profile/${i.id}`)}
+                                                                key={ind}
+                                                                className={"hover-decoration"}>{`${i.name}, `}</span>)}
+                          </a>
+                        </div>
+
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: 10,
+                          }}
+                        >
+                          <GroupButtonOfSongItem songTarget={item} playlistDetail={playlistDetail}
+                                                 listSongOfPlayList={listSongOfPlayList}
+                                                 setListSongOfPlaylist={setListSongOfPlaylist}/>
+                        </div>
                       </div>
-                    </div>
-                  }
-                />
-              </List.Item>
+                    }
+                  />
+                </List.Item>
+              </a>
             )}
           />
         </Col>
@@ -232,4 +228,4 @@ const ListSongOfPlaylist = () => {
   );
 };
 
-export default ListSongOfPlaylist;
+export default ListSongOfAlbum;

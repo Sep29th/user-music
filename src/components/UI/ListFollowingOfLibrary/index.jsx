@@ -15,13 +15,11 @@ const ListFollowingOfLibrary = () => {
   return (
     <>
       <Row gutter={[15, 40]}>
-        {listFollowed.content && listFollowed.content.map((i) => {
+        {listFollowed.content && listFollowed.content.map((i, ind) => {
           return (
-            <>
-              <Col span={4}>
-                <CardFollowingOfLibrary item={i}/>
-              </Col>
-            </>
+            <Col span={4} key={ind}>
+              <CardFollowingOfLibrary item={i}/>
+            </Col>
           );
         })}
       </Row>

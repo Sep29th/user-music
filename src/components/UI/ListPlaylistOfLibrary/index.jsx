@@ -1,50 +1,41 @@
 import {Button, Col, Modal, Row, Tabs, Tooltip} from "antd";
 import CardPlaylistOfLibrary from "../CardPlaylistOfLibrary";
 import {FaPlus} from "react-icons/fa";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import CreateNewPlaylistModal from "../CreateNewPlayListModal";
 import {useSelector} from "react-redux";
-import {getAllPlaylistByUserId} from "../../../services/api/playlist/index.js";
 
-const items = [
-  {
-    key: "1",
-    label: (
-      <a
-        className="tab-label ant-tabs-tab ant-tabs-tab  ant-tabs-tab-btn"
-        style={{fontSize: 20}}
-      >
-        Create new playlist
-      </a>
-    ),
-    children: <CreateNewPlaylistModal/>,
-  },
-];
 const ListPlaylistOfLibrary = () => {
-  const authInfo = useSelector(state => state.auth);
+  const listPlaylist = useSelector(state => state.playlist);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [listPlaylist, setListPlaylist] = useState([]);
+  const items = [
+    {
+      key: "1",
+      label: (
+        <a
+          className="tab-label ant-tabs-tab ant-tabs-tab  ant-tabs-tab-btn"
+          style={{fontSize: 20}}
+        >
+          Create new playlist
+        </a>
+      ),
+      children: <CreateNewPlaylistModal/>,
+    },
+  ];
   const handleOk = () => {
     setIsModalOpen(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  useEffect(() => {
-    (async () => {
-      setListPlaylist((await getAllPlaylistByUserId(authInfo.id)).content);
-    })()
-  }, []);
   return (
     <>
       <Row gutter={[15, 40]}>
-        {listPlaylist.map((i) => {
+        {listPlaylist.map((i, ind) => {
           return (
-            <>
-              <Col span={4}>
-                <CardPlaylistOfLibrary item={i}/>
-              </Col>
-            </>
+            <Col span={4} key={ind}>
+              <CardPlaylistOfLibrary item={i}/>
+            </Col>
           );
         })}
         <Col span={4}>

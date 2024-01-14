@@ -16,7 +16,8 @@ const normFile = (e) => {
   return e?.fileList;
 };
 const key = 'updatable';
-const UploadSongOfSinger = () => {
+const UploadSongOfSinger = (props) => {
+  const {reload, setReload} = props;
   const authInfo = useSelector(state => state.auth);
   const [listCategory, setListCategory] = useState([]);
   const [listSinger, setListSinger] = useState([]);
@@ -74,6 +75,7 @@ const UploadSongOfSinger = () => {
       setSourceSound(null);
       setThumbnailSrc(null);
       openNotification("Thêm thành công", "Vào danh mục bài hát của bạn để xem chi tiết");
+      setReload(!reload);
     })()
   }
   useEffect(() => {

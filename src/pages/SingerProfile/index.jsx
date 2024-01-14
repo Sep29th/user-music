@@ -1,6 +1,7 @@
-import {Button, Col, Row, Skeleton, Statistic, Tabs} from "antd";
+import {Button, Col, Row, Statistic, Tabs} from "antd";
 import {FaClock, FaLink, FaUser} from "react-icons/fa";
-
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import {SlUserFollow, SlUserUnfollow} from "react-icons/sl";
 import {SiGmail} from "react-icons/si";
 
@@ -11,12 +12,14 @@ import {useNavigate, useParams} from "react-router-dom";
 import {getUserById} from "../../services/api/user/index.js";
 import {getAllSongBySingerId} from "../../services/api/song/index.js";
 import {useSelector} from "react-redux";
-import {getFollowedSinger, getListFollower} from "../../services/api/singer/index.js";
+import {addFollow, getFollowedSinger, getListFollower, removeFollow} from "../../services/api/singer/index.js";
+import AlbumsOfSinger from "../../components/UI/AlbumsOfSinger/index.jsx";
+import PlaylistOfSinger from "../../components/UI/PlaylistOfSinger/index.jsx";
 
 const SingerProfile = () => {
   const {singerId} = useParams();
   const authInfo = useSelector(state => state.auth);
-  const [follow, setFollow] = useState(false);
+  const [follow, setFollow] = useState(true);
   const [singerProfile, setSingerProfile] = useState({id: singerId});
   const [totalTrack, setTotalTrack] = useState([]);
   const [follower, setFollower] = useState({});
@@ -28,8 +31,12 @@ const SingerProfile = () => {
       setTotalTrack((await getAllSongBySingerId(singerId)).content);
       setFollower(await getListFollower(authInfo.id));
       setFollowing(await getFollowedSinger(authInfo.id));
+      const tmpObj = await getFollowedSinger(authInfo.id);
+      const arrFollowed = tmpObj.content ? tmpObj.content : [];
+      if (arrFollowed.findIndex((i) => i.id === parseInt(singerId)) !== -1)
+        setFollow(false);
     })()
-  }, []);
+  }, [singerId]);
   const items = [
     {
       key: "1",
@@ -39,14 +46,12 @@ const SingerProfile = () => {
     {
       key: "2",
       label: "Album",
-      children: <></>
-      // children: <AlbumsOfSinger singerProfile={singerProfile}/>,
+      children: <AlbumsOfSinger singerProfile={singerProfile}/>,
     },
     {
       key: "3",
       label: "Playlist",
-      children: <></>
-      // children: <PlaylistOfSinger singerProfile={singerProfile}/>,
+      children: <PlaylistOfSinger singerProfile={singerProfile}/>,
     },
   ];
 
@@ -127,6 +132,7 @@ const SingerProfile = () => {
                           icon={<SlUserFollow/>}
                           onClick={() => {
                             setFollow(!follow);
+                            addFollow(authInfo.id, singerId);
                           }}
                         >
                           Follow
@@ -137,6 +143,7 @@ const SingerProfile = () => {
                           icon={<SlUserUnfollow/>}
                           onClick={() => {
                             setFollow(!follow);
+                            removeFollow(authInfo.id, singerId);
                           }}
                         >
                           Unfollow

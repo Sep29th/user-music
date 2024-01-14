@@ -1,4 +1,4 @@
-import {Avatar, Button, Col, ConfigProvider, Form, Input, List, Modal, Row, Select, Upload,} from "antd";
+import {Avatar, Button, Col, ConfigProvider, Form, Input, List, Modal, Row, Select, Tag, Upload,} from "antd";
 import {useState} from "react";
 import Dragger from "antd/es/upload/Dragger";
 import {IoCloudUploadOutline} from "react-icons/io5";
@@ -111,7 +111,7 @@ const CardSongEditOfSinger = (props) => {
                 </div>
               </div>
             }
-            description={`Status: ${requestSend === 0 ? "Private" : requestSend === 1 ? "Pending" : "Public"}`}
+            description={<span>Status:{" "}{requestSend === 0 ? <Tag color="red">Private</Tag> : requestSend === 1 ? <Tag color="yellow">Pending</Tag> : <Tag color="green">Public</Tag>}</span>}
           />
         </List.Item>
       </a>

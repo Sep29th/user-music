@@ -1,14 +1,18 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import {FaHeart, FaHeartBroken, FaPlay} from "react-icons/fa";
 import "./style.css";
 import {Button, Tooltip} from "antd";
 import {PiQueueFill} from "react-icons/pi";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {addOneSong, playOneSongNow} from "../../../redux/actions/songQueue/index.js";
 import {useNavigate} from "react-router-dom";
+import {removeSongToFavoritePlaylist} from "../../../services/api/playlist/index.js";
+import {removeOneSongFromFavoritePlaylist} from "../../../redux/actions/favorite/index.js";
+import 'animate.css';
 
 const CardLikedSong = (props) => {
   const {item} = props;
+  const authInfo = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
@@ -24,6 +28,10 @@ const CardLikedSong = (props) => {
   }
   const handlePlayNow = () => {
     dispatch(playOneSongNow(item));
+  }
+  const handleUnlike = () => {
+    removeSongToFavoritePlaylist(authInfo.id, item.id);
+    dispatch(removeOneSongFromFavoritePlaylist(item));
   }
   return (
     <div
@@ -70,7 +78,7 @@ const CardLikedSong = (props) => {
                 }
                 color={"#fff"}
               >
-                <Button size={"small"} className="btn-song-of-playlist">
+                <Button onClick={handleUnlike} size={"small"} className="btn-song-of-playlist">
                   <FaHeartBroken/>
                 </Button>
               </Tooltip>
@@ -124,7 +132,6 @@ const CardLikedSong = (props) => {
         <FaHeart style={{fontSize: 12}}/> <span onClick={handlePlayNow}>{item.name}</span>
       </a>
       <a
-        className="display-name-song-of-card-liked-song"
         style={{
           display: "inline-block",
           width: "100%",
@@ -136,7 +143,8 @@ const CardLikedSong = (props) => {
         }}
       >
         <span>{item.singers.map((i, ind) => <span key={ind}
-                                                  onClick={() => navigate(`/singer-profile/${i.id}`)}>{`${i.name } `}</span>)}</span>
+                                                  className="display-name-song-of-card-liked-song"
+                                                  onClick={() => navigate(`/singer-profile/${i.id}`)}>{`${i.name} `}</span>)}</span>
       </a>
     </div>
   );

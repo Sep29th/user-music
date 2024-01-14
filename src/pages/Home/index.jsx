@@ -6,8 +6,10 @@ import RightSideBarHomePage from "../../components/UI/RightSideBarHomePage";
 import {useEffect, useState} from "react";
 import {getAllMainpagePlayList, getAllSongByPlaylistId} from "../../services/api/playlist/index.js";
 import ListCardSongMainpage from "../../components/UI/ListCardSongMainpage/index.jsx";
+import {useNavigate} from "react-router-dom";
 const Home = () => {
   const [playlistMainpageList, setPlaylistMainpageList] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     (async () => {
       setPlaylistMainpageList((await getAllMainpagePlayList()).content);
@@ -25,11 +27,11 @@ const Home = () => {
                     {indexPlaylist % 2 === 0 ?
                       (
                         <Divider orientation="left" plain>
-                          <h2>{itemPlaylist.name}</h2>
+                          <h2 style={{cursor: "pointer"}} onClick={() => navigate(`/list-song-of-playlist/${itemPlaylist.id}`)}>{itemPlaylist.name}</h2>
                         </Divider>
                       ) : (
                         <Divider orientation="right" plain>
-                          <h2>{itemPlaylist.name}</h2>
+                          <h2 style={{cursor: "pointer"}} onClick={() => navigate(`/list-song-of-playlist/${itemPlaylist.id}`)}>{itemPlaylist.name}</h2>
                         </Divider>
                       )
                     }

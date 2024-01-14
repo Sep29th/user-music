@@ -1,87 +1,56 @@
-import React from "react";
-import { Button, Card, Flex, Popover } from "antd";
+import {Card} from "antd";
 import "./style.css";
-import { FaPlay } from "react-icons/fa";
-const { Meta } = Card;
-import { IoIosMore } from "react-icons/io";
-import { MdOutlineQueueMusic } from "react-icons/md";
+import {useNavigate} from "react-router-dom";
 
-const CardAlbumOfSinger = () => (
-  <Card
-    className="card-album"
-    bodyStyle={{ padding: 2 }}
-    bordered={true}
-    // hoverable
-    style={{
-      width: 160,
-      marginBottom: 16,
-      overflow: "hidden",
-      boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
-      cursor: "pointer",
-    }}
-    size="large"
-    cover={
-      <div
-        style={{ padding: 16, width: 160, height: 160, background: "#f7f7f7" }}
-      >
-        <img
-          alt="example"
-          src="https://s3-alpha.figma.com/hub/file/2734964093/9f5edc36-eb4d-414a-8447-10514f2bc224-cover.png"
-          style={{
-            width: 128,
-            height: 128,
-            display: "flex",
-            alignItems: "center",
-          }}
-        />
-      </div>
-    }
-  >
-    <Card.Meta
-      title={
+const CardAlbumOfSinger = (props) => {
+  const {item} = props;
+  const navigate = useNavigate();
+  return (
+    <Card
+      onClick={() => navigate(`/list-song-of-album/${item.id}`)}
+      className="card-album"
+      bodyStyle={{padding: 2}}
+      bordered={true}
+      style={{
+        width: 160,
+        marginBottom: 16,
+        overflow: "hidden",
+        boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
+        cursor: "pointer",
+      }}
+      size="large"
+      cover={
         <div
-          style={{
-            display: "flex",
-
-            alignItems: "center",
-          }}
+          style={{padding: 16, width: 160, height: 160, background: "#e9e9e9"}}
         >
-          <span style={{ width: "100%", textAlign: "center" }}>name album</span>
-          {/* <Popover
-            content={
-              <div
-                className="hover-add-to-queue"
-                style={{
-                  display: "flex",
-                  width: 160,
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  borderRadius: "5px",
-                }}
-              >
-                <span>Add to queue</span>
-                <MdOutlineQueueMusic
-                  style={{ fontSize: 24, color: "#31c27c" }}
-                />
-              </div>
-            }
-            placement="bottomLeft"
-          >
-            <a
-              style={{
-                color: "#31c27c",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <IoIosMore style={{ fontSize: 20 }} />
-            </a>
-          </Popover> */}
+          <img
+            alt="example"
+            src={item.thumbnail}
+            style={{
+              width: 128,
+              height: 128,
+              display: "flex",
+              alignItems: "center",
+            }}
+          />
         </div>
       }
-      //description="singer name: asbasnc"
-      style={{ padding: "0px 5px 5px 5px" }}
-    />
-  </Card>
-);
+    >
+      <Card.Meta
+        title={
+          <div
+            style={{
+              display: "flex",
+
+              alignItems: "center",
+            }}
+          >
+            <span style={{width: "100%", textAlign: "center", overflow: "hidden", textOverflow: "ellipsis"}}>{item.name}</span>
+          </div>
+        }
+        style={{padding: "0px 5px 5px 5px"}}
+      />
+    </Card>
+  );
+};
 export default CardAlbumOfSinger;

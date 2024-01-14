@@ -9,51 +9,56 @@ import Library from "../../pages/Library/index.jsx";
 import SearchResult from "../../pages/SearchResult/index.jsx";
 import DetailInfoMation from "../../pages/DetailInformation/index.jsx";
 import ForSinger from "../../pages/ForSinger/index.jsx";
+import ListSongOfAlbum from "../../pages/ListSongOfAlbum/index.jsx";
 
 export const configRouters = [
   {
-    element: <AuthLayout />,
+    element: <AuthLayout/>,
     children: [
       {
         path: "/login",
-        element: <Login />,
+        element: <Login/>,
       },
       {
         path: "/register",
-        element: <Register />,
+        element: <Register/>,
       },
     ],
   },
   {
-    element: <UserLayout />,
+    element: <UserLayout/>,
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <Home/>,
       },
       {
-        path: "/list-song-of-playlist", /* */
-        element: <ListSongOfPlaylist />,
+        path: "/list-song-of-playlist/:playlistId", /* */
+        element: <ListSongOfPlaylist/>,
+      },
+      {
+        path: "/list-song-of-album/:albumId", /* */
+        element: <ListSongOfAlbum/>
       },
       {
         path: "/singer-profile/:singerId", /* */
-        element: <SingerProfile />,
+        element: <SingerProfile/>,
       },
       {
         path: "/library",
-        element: <Library />,
+        element: <Library/>,
       },
       {
         path: "/search-result", /* */
-        element: <SearchResult />,
+        element: <SearchResult/>,
       },
       {
         path: "/detail-information",
-        element: <DetailInfoMation />,
+        element: <DetailInfoMation/>,
       },
       {
         path: "/for-singer",
-        element: <ForSinger />,
+        element: <ForSinger/>,
       },
     ],
   },

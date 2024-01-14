@@ -1,67 +1,62 @@
-import { Avatar, Button, Col, Divider, List, Skeleton, Tooltip } from "antd";
-import { FaHeart } from "react-icons/fa";
-import { IoMdPlay } from "react-icons/io";
-import { PiQueueFill } from "react-icons/pi";
+import {Avatar, Button, Col, Divider, List, Tooltip} from "antd";
+import {IoMdPlay} from "react-icons/io";
+import {PiQueueFill} from "react-icons/pi";
 import InfiniteScroll from "react-infinite-scroll-component";
 import "./style.css";
 import GroupButtonOfSongItem from "../GroupButtonOfSongItem";
+import {useEffect, useState} from "react";
+import {getAllSongByPlaylistId} from "../../../services/api/playlist/index.js";
+import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {addSongList, playListSongNow} from "../../../redux/actions/songQueue/index.js";
 
-const data = [
-  {
-    title: "Ant Design Title 1",
-  },
-  {
-    title: "Ant Design Title 2",
-  },
-  {
-    title: "Ant Design Title 3",
-  },
-  {
-    title: "Ant Design Title 4",
-  },
-  {
-    title: "Ant Design Title 1",
-  },
-  {
-    title: "Ant Design Title 2",
-  },
-  {
-    title: "Ant Design Title 3",
-  },
-  {
-    title: "Ant Design Title 4",
-  },
-  {
-    title: "Ant Design Title 1",
-  },
-  {
-    title: "Ant Design Title 2",
-  },
-  {
-    title: "Ant Design Title 3",
-  },
-  {
-    title: "Ant Design Title 4",
-  },
-];
-
-const CardPlaylistOfSinger = () => {
+const CardPlaylistOfSinger = (props) => {
+  const {item} = props;
+  const [listSongOfPlaylist, setListSongOfPlaylist] = useState([]);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handlePlaylistNow = () => {
+    dispatch(playListSongNow(listSongOfPlaylist));
+  }
+  const handleAddPlaylist = () => {
+    dispatch(addSongList(listSongOfPlaylist));
+  }
+  useEffect(() => {
+    (async () => {
+      const data = (await getAllSongByPlaylistId(item.id)).content;
+      setListSongOfPlaylist(data.filter(i => i.status === 2));
+    })();
+  }, [item.id]);
   return (
     <>
       <Col span={4}>
-        <a href="">
-          <img
-            src="https://i.pinimg.com/originals/bd/11/21/bd1121d056ec8e2d3f333372cfef5e51.jpg"
-            style={{
-              width: "100%",
-              aspectRatio: "1/1",
-              objectFit: "cover",
-            }}
-          />
-        </a>
-        <a style={{ color: "#2c2c2c" }}>
-          <b>name playlist</b>
-        </a>
+        {listSongOfPlaylist[0]?.avatar ?
+          (
+            <img
+              src={listSongOfPlaylist[0]?.avatar}
+              style={{
+                width: "100%",
+                aspectRatio: "1/1",
+                objectFit: "cover",
+                cursor: "pointer"
+              }}
+              onClick={() => navigate(`/list-song-of-playlist/${item.id}`)}
+            />
+          ) : (
+            <img
+              src="https://cdn.smehost.net/dailyrindblogcom-orchardprod/wp-content/uploads/2016/03/playlist2.png"
+              style={{
+                width: "100%",
+                aspectRatio: "1/1",
+                objectFit: "cover",
+                cursor: "pointer"
+              }}
+              onClick={() => navigate(`/list-song-of-playlist/${item.id}`)}
+            />
+          )
+        }
+        <span onClick={() => navigate(`/list-song-of-playlist/${item.id}`)}
+              style={{cursor: "pointer", color: "#2c2c2c", fontSize: 22, fontWeight: 700}}>{item.name}</span>
       </Col>
       <Col span={20}>
         <div
@@ -78,14 +73,13 @@ const CardPlaylistOfSinger = () => {
               className="btn-song-of-playlist"
               style={{
                 display: "flex",
-
                 justifyContent: "center",
               }}
+              onClick={handlePlaylistNow}
             >
-              <IoMdPlay style={{ fontSize: 20 }} />
+              <IoMdPlay style={{fontSize: 20}}/>
             </Button>
           </Tooltip>
-
           <Tooltip placement="bottomLeft" title={"Add to queue"}>
             <Button
               shape="circle"
@@ -96,80 +90,79 @@ const CardPlaylistOfSinger = () => {
 
                 justifyContent: "center",
               }}
+              onClick={handleAddPlaylist}
             >
-              <PiQueueFill style={{ fontSize: 20 }} />
+              <PiQueueFill style={{fontSize: 20}}/>
             </Button>
           </Tooltip>
         </div>
-
-        <div style={{ marginTop: 12 }} id={"scrollableDiv"}>
+        <div style={{marginTop: 12}} id={"scrollableDiv"}>
           <InfiniteScroll
             className={"rightSidebarScroll"}
-            dataLength={data.length}
-            //next={loadMoreData}
+            dataLength={listSongOfPlaylist.length}
             height={200}
-            hasMore={data.length < 50}
-            loader={
-              <Skeleton
-                avatar
-                paragraph={{
-                  rows: 1,
-                }}
-                active
-              />
-            }
-            endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
             scrollableTarget="scrollableDiv"
           >
             <List
               size="small"
               itemLayout="horizontal"
-              dataSource={data}
-              renderItem={() => (
-                <a className="song-item-list-a">
-                  <List.Item className="song-item-list-a">
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar
-                          size={"small"}
-                          shape="square"
-                          src={`https://d21buns5ku92am.cloudfront.net/26628/images/419679-1x1_SoundCloudLogo_cloudmark-f5912b-large-1645807040.jpg`}
-                        />
-                      }
-                      title={
+              dataSource={listSongOfPlaylist}
+              renderItem={(i, ind) => (
+                <List.Item className="song-item-list-a" key={ind}>
+                  <List.Item.Meta
+                    avatar={
+                      i.avatar ?
+                        (
+                          <Avatar
+                            size={"small"}
+                            shape="square"
+                            src={i.avatar}
+                          />
+                        ) : (
+                          <Avatar
+                            size={"small"}
+                            shape="square"
+                            src={"https://play-lh.googleusercontent.com/D9X7m5dTNzjeSPxBqzh1RwrZLXJDFTpht9-8W8RJtiaOAlFxNvL5MnSDRxoDnQRYhz0"}
+                          />
+                        )
+                    }
+                    title={
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <a
+                          className="display-name-song-of-playlist"
+                          style={{fontSize: 14}}
+                        >
+                          {i.name}
+                          {" - "}
+                          <span
+                            style={{color: "#999999", fontWeight: "300"}}
+                          >
+                              {<span>{i.singers && i.singers.map((u, ind) => <span
+                                key={ind} className={"hover-decoration"} style={{cursor: "pointer"}}
+                                onClick={() => navigate(`/singer-profile/${u.id}`)}>{u.name}, </span>)}</span>}
+                            </span>
+                        </a>
+
                         <div
                           style={{
                             display: "flex",
-                            justifyContent: "space-between",
+                            gap: 10,
                           }}
                         >
-                          <a
-                            href=""
-                            className="display-name-song-of-playlist"
-                            style={{ fontSize: 14 }}
-                          >
-                            {"song name"}
-                            {" - "}
-                            <span
-                              style={{ color: "#999999", fontWeight: "300" }}
-                            >
-                              {"singer name"}
-                            </span>
-                          </a>
-
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: 10,
-                            }}
-                          >
-                            <GroupButtonOfSongItem />
-                          </div>
+                          <GroupButtonOfSongItem
+                            songTarget={i} playlistDetail={item}
+                            listSongOfPlayList={listSongOfPlaylist}
+                            setListSongOfPlaylist={setListSongOfPlaylist}/>
                         </div>
-                      }
-                    />
-                  </List.Item>
-                </a>
+                      </div>
+                    }
+                  />
+                </List.Item>
               )}
             />
           </InfiniteScroll>

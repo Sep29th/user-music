@@ -1,4 +1,4 @@
-import { get, put, del, post } from "../../utils";
+import {del, get, post, put} from "../../utils";
 
 // them cai creator
 export const savePlaylistForUser = async (object) => {
@@ -8,6 +8,10 @@ export const savePlaylistForUser = async (object) => {
   };
   return await post("playlist", playlist);
 };
+
+export const getPlaylistByPlaylistId = async (playlistId) => {
+  return await get(`playlist/${playlistId}`);
+}
 
 export const savePlaylistForMainPage = async (object) => {
   const playlist = {
@@ -63,18 +67,18 @@ export const getTotalPlaylist = async () => {
 };
 
 
-export const addSongToFavoritePlaylist = async (userId,songId) => {
-  return await post(`user/${userId}/playlist/favorite/${songId}`,{});
+export const addSongToFavoritePlaylist = async (userId, songId) => {
+  return await post(`user/${userId}/playlist/favorite/${songId}`, {});
 };
 
-export const removeSongToFavoritePlaylist = async (userId,songId)=>{
+export const removeSongToFavoritePlaylist = async (userId, songId) => {
   return await del(`user/${userId}/playlist/favorite/${songId}`)
 }
 
-export const saveFavoritePlaylist = async (object)=>{
+export const saveFavoritePlaylist = async (object) => {
   object = {
     ...object,
-    role : "FAVORITE"
+    role: "FAVORITE"
   }
-  return await post(`playlist`,object);
+  return await post(`playlist`, object);
 }

@@ -1,14 +1,22 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { Col, Dropdown, Row } from "antd";
+import {NavLink, Outlet, useNavigate} from "react-router-dom";
+import {Col, Dropdown, Row} from "antd";
 import "./UserLLayout.scss";
-import { FaCaretDown } from "react-icons/fa";
+import {FaCaretDown} from "react-icons/fa";
 import FooterUserLayoutAudioPlayer from "../../UI/FooterUserLayoutAudioPlayer";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {updateFavoritePlaylist} from "../../../redux/actions/favorite/index.js";
+import {
+  getAllPlaylistByUserId,
+  getAllSongByPlaylistId,
+  getFavoritePlaylistByUserId
+} from "../../../services/api/playlist/index.js";
+import {updateListPlaylist} from "../../../redux/actions/playlist/index.js";
 
 const UserLayout = () => {
   const navigate = useNavigate();
   const authInfo = useSelector(state => state.auth);
-
+  const dispatch = useDispatch();
   const items = [
     {
       key: "1",
@@ -42,11 +50,18 @@ const UserLayout = () => {
       ),
     },
   ];
+  useEffect(() => {
+    (async () => {
+      const data = await getAllSongByPlaylistId((await getFavoritePlaylistByUserId(authInfo.id)).content.id);
+      if (data.content) dispatch(updateFavoritePlaylist(data.content));
+      dispatch(updateListPlaylist((await getAllPlaylistByUserId(authInfo.id)).content));
+    })()
+  }, []);
   return (
     <>
       {/* header */}
-      <Row gutter={[0, 15]} justify={"center"} style={{ marginBottom: 16 }}>
-        <Col span={24} style={{ backgroundColor: "#333333" }}>
+      <Row gutter={[0, 15]} justify={"center"} style={{marginBottom: 16}}>
+        <Col span={24} style={{backgroundColor: "#333333"}}>
           <Row justify={"center"}>
             <Col
               span={15}
@@ -57,7 +72,7 @@ const UserLayout = () => {
                 textAlign: "center",
               }}
             >
-              <Col span={4} style={{ borderRight: "1px solid #cccccc" }}>
+              <Col span={4} style={{borderRight: "1px solid #cccccc"}}>
                 <NavLink
                   className={"Header__nav"}
                   to={"/"}
@@ -111,7 +126,7 @@ const UserLayout = () => {
                 </NavLink>
               </Col>
               <Col span={2}>
-                <Dropdown menu={{ items }} placement="bottomRight">
+                <Dropdown menu={{items}} placement="bottomRight">
                   <div
                     style={{
                       display: "flex",
@@ -129,7 +144,7 @@ const UserLayout = () => {
                       }}
                     />
                     <FaCaretDown
-                      style={{ color: "white", marginLeft: "10px" }}
+                      style={{color: "white", marginLeft: "10px"}}
                     />
                   </div>
                 </Dropdown>
@@ -139,9 +154,9 @@ const UserLayout = () => {
         </Col>
       </Row>
       {/* body */}
-      <Outlet />
+      <Outlet/>
       {/* footer */}
-      <FooterUserLayoutAudioPlayer />
+      <FooterUserLayoutAudioPlayer/>
     </>
   );
 };

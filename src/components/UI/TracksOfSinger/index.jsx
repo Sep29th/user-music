@@ -8,9 +8,9 @@ const TracksOfSinger = (props) => {
   const [listSong, setListSong] = useState([]);
   useEffect(() => {
     (async () => {
-      setListSong((await getAllSongBySingerId(singerProfile.id)).content);
+      setListSong((await getAllSongBySingerId(singerProfile.id)).content.filter(i => i.status === 2));
     })()
-  }, []);
+  }, [singerProfile]);
   return (
     <>
       <Row>

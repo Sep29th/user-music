@@ -4,14 +4,15 @@ import CardSongEditOfSinger from "../CardSongEditOfSinger";
 import {useSelector} from "react-redux";
 import {getAllSongByCreatorId} from "../../../services/api/song/index.js";
 
-const ManageTracksOfSinger = () => {
+const ManageTracksOfSinger = (props) => {
+  const {reload} = props;
   const authInfo = useSelector(state => state.auth);
   const [listTrack, setListTrack] = useState([]);
   useEffect(() => {
     (async () => {
       setListTrack((await getAllSongByCreatorId(authInfo.id)).content)
     })()
-  }, []);
+  }, [authInfo.id, reload]);
   return (
     <>
       <Row>

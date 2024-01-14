@@ -1,11 +1,31 @@
-import { Button, Col, Row, Skeleton, Tooltip } from "antd";
-import React, { useState } from "react";
-import { FaLock, FaLockOpen } from "react-icons/fa";
+import {Button, Col, Row, Tooltip} from "antd";
+import {useEffect, useState} from "react";
+import {FaLock, FaLockOpen} from "react-icons/fa";
 import InfiniteScroll from "react-infinite-scroll-component";
+import {useDispatch, useSelector} from "react-redux";
+import {addSongToPlaylist, getAllSongByPlaylistId} from "../../../services/api/playlist/index.js";
+import {updateOnePlaylistOfListPlaylist} from "../../../redux/actions/playlist/index.js";
 
-const ItemPlaylist = () => {
-  const [isAdded, setIsAdded] = useState(false);
+const ItemPlaylist = (props) => {
+  const {item, songTarget} = props;
   const [status, setStatus] = useState(false);
+  const [allSongOfPlaylist, setAllSongOfPlaylist] = useState([]);
+  const dispatch = useDispatch();
+  const [isAdded, setIsAdded] = useState(false);
+  const handleAddToPlaylist = () => {
+    (async () => {
+      const newData = (await addSongToPlaylist(item.id, songTarget.id)).content;
+      dispatch(updateOnePlaylistOfListPlaylist(newData));
+      setIsAdded(true);
+    })();
+  };
+  useEffect(() => {
+    (async () => {
+      const obj = await getAllSongByPlaylistId(item.id);
+      if (obj.content) setAllSongOfPlaylist(obj.content);
+      if (obj.content.findIndex(i => i.id === songTarget.id) !== -1) setIsAdded(true);
+    })();
+  }, []);
   return (
     <Col
       span={24}
@@ -26,15 +46,29 @@ const ItemPlaylist = () => {
           gap: 8,
         }}
       >
-        <img
-          src="https://i.pinimg.com/originals/4d/9b/a9/4d9ba9a5cb079194ef884d75105c12dc.png"
-          style={{
-            height: "100%",
-            aspectRatio: "1/1",
-            objectFit: "cover",
-          }}
-        />
-        <span>nameplaylist</span>
+        {
+          allSongOfPlaylist[0]?.avatar ?
+            (
+              <img
+                src={allSongOfPlaylist[0].avatar}
+                style={{
+                  height: "100%",
+                  aspectRatio: "1/1",
+                  objectFit: "cover",
+                }}
+              />
+            ) : (
+              <img
+                src="https://cdn.smehost.net/dailyrindblogcom-orchardprod/wp-content/uploads/2016/03/playlist2.png"
+                style={{
+                  height: "100%",
+                  aspectRatio: "1/1",
+                  objectFit: "cover",
+                }}
+              />
+            )
+        }
+        <span style={{fontSize: 18, fontWeight: 500}}>{item.name}</span>
       </div>
       <div
         style={{
@@ -47,8 +81,8 @@ const ItemPlaylist = () => {
       >
         {status ? (
           <Tooltip
-            placement="right"
-            title={<span style={{ color: "#222222" }}>set to public</span>}
+            placement="left"
+            title={<span style={{color: "#222222"}}>set to public</span>}
             color={"#fff"}
           >
             <Button
@@ -56,13 +90,13 @@ const ItemPlaylist = () => {
               className="btn-song-of-playlist"
               onClick={() => setStatus(!status)}
             >
-              <FaLockOpen />
+              <FaLockOpen/>
             </Button>
           </Tooltip>
         ) : (
           <Tooltip
-            placement="right"
-            title={<span style={{ color: "#222222" }}>set to private</span>}
+            placement="left"
+            title={<span style={{color: "#222222"}}>set to private</span>}
             color={"#fff"}
           >
             <Button
@@ -70,15 +104,14 @@ const ItemPlaylist = () => {
               className="btn-song-of-playlist"
               onClick={() => setStatus(!status)}
             >
-              <FaLock />
+              <FaLock/>
             </Button>
           </Tooltip>
         )}
         {isAdded ? (
           <Button
             size={"small"}
-            className="btn-song-of-playlist"
-            onClick={() => setIsAdded(!isAdded)}
+            disabled
           >
             Added
           </Button>
@@ -86,7 +119,7 @@ const ItemPlaylist = () => {
           <Button
             size={"small"}
             className="btn-song-of-playlist"
-            onClick={() => setIsAdded(!isAdded)}
+            onClick={handleAddToPlaylist}
           >
             Add to playlist
           </Button>
@@ -96,21 +129,20 @@ const ItemPlaylist = () => {
   );
 };
 
-const AddToPlaylistOfModal = () => {
+const AddToPlaylistOfModal = (props) => {
+  const {songTarget} = props;
+  const listPlaylist = useSelector(state => state.playlist);
   return (
     <>
       <InfiniteScroll
         className={"rightSidebarScroll"}
         dataLength={10}
-        //next={loadMoreData}
         height={400}
-        //hasMore={data.length < 50}
-
         scrollableTarget="scrollableDiv"
       >
         <Row>
-          {[...Array(10)].map(() => {
-            return <ItemPlaylist />;
+          {listPlaylist.map((i, ind) => {
+            return <ItemPlaylist item={i} songTarget={songTarget} key={ind}/>;
           })}
         </Row>
       </InfiniteScroll>
