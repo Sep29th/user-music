@@ -11,8 +11,8 @@ import {
 } from "antd";
 import Dragger from "antd/es/upload/Dragger";
 import React from "react";
-import { IoCloudUploadOutline } from "react-icons/io5";
 import { PlusOutlined } from "@ant-design/icons";
+import { IoCloudUploadOutline } from "react-icons/io5";
 import { LuUpload } from "react-icons/lu";
 const options = [];
 for (let i = 10; i < 36; i++) {

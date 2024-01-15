@@ -1,94 +1,225 @@
-import {Button, Col, Form, Input, Row, Tabs} from "antd";
-import {FaLock, FaLockOpen, FaUser} from "react-icons/fa";
-import {Link} from "react-router-dom";
+import { Button, Col, ConfigProvider, Form, Input, Row, Tabs } from "antd";
+import { FaLock, FaLockOpen, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   return (
     <>
-      <Row gutter={[0, 15]} justify={"center"} align={"middle"} style={{
-        padding: "20px",
-        borderRadius: "20px",
-        backdropFilter: "blur(15px)",
-        border: "1px solid #cccccc"
-      }}>
-        <Col span={22} style={{textAlign: "center"}}>
-          <span className={"Login__title"}>ĐĂNG KÝ</span>
-        </Col>
-        <Col span={22} style={{textAlign: "start"}}>
-          <h2 style={{
-            fontFamily: "'Dancing Script', cursive",
-            fontSize: "25px",
-            color: "white",
-            margin: 0
-          }}>Bạn là ?</h2>
-        </Col>
-        <Col span={22}>
-          <Tabs items={[
-            {
-              label: <p style={{
-                fontFamily: "'Dancing Script', cursive",
-                fontSize: "25px",
-                color: "white",
-                margin: 0}}>Người nghe</p>,
-              key: "1",
-              children: (
-                <Form>
-                  <Col span={24}>
-                    <Form.Item>
-                      <Input size={"large"} addonBefore={<FaUser style={{color: "white"}}/>} placeholder={"Email"}/>
-                    </Form.Item>
-                  </Col>
-                  <Col span={24}>
-                    <Form.Item>
-                      <Input.Password size={"large"} addonBefore={<FaLock style={{color: "white"}}/>} placeholder={"Mật khẩu"}/>
-                    </Form.Item>
-                  </Col>
-                  <Col span={24}>
-                    <Form.Item>
-                      <Input.Password size={"large"} addonBefore={<FaLockOpen style={{color: "white"}}/>} placeholder={"Nhập lại mật khẩu"}/>
-                    </Form.Item>
-                  </Col>
-
-                </Form>
-              )
+      <ConfigProvider
+        theme={{
+          token: {
+            colorBgContainer: "#363a37",
+            colorTextPlaceholder: "#707570",
+            colorBorder: "none",
+            activeBorderColor: "#31c27c",
+            colorText: "#31c27c",
+            hoverBorderColor: "#31c27c",
+          },
+          components: {
+            Input: {
+              activeBorderColor: "#36c27c",
+              hoverBorderColor: "#36c27c",
+              colorPrimaryActive: "#36c27c",
+              fontSize: 11,
+              inputFontSizeLG: 20,
             },
-            {
-              label: <p style={{
-                fontFamily: "'Dancing Script', cursive",
-                fontSize: "25px",
-                color: "white",
-                margin: 0}}>Ca sĩ</p>,
-              key: "2",
-              children: (
-                <Form>
-                  <Col span={24}>
-                    <Form.Item>
-                      <Input size={"large"} addonBefore={<FaUser style={{color: "white"}}/>} placeholder={"Email"}/>
-                    </Form.Item>
-                  </Col>
-                  <Col span={24}>
-                    <Form.Item>
-                      <Input.Password size={"large"} addonBefore={<FaLock style={{color: "white"}}/>} placeholder={"Mật khẩu"}/>
-                    </Form.Item>
-                  </Col>
-                  <Col span={24}>
-                    <Form.Item>
-                      <Input.Password size={"large"} addonBefore={<FaLockOpen style={{color: "white"}}/>} placeholder={"Nhập lại mật khẩu"}/>
-                    </Form.Item>
-                  </Col>
-
-                </Form>
-              )
-            }
-          ]}/>
-        </Col>
-        <Col span={18} style={{display: "flex", justifyContent: "space-evenly", alignItems: "center"}}>
-          <Button size={"large"} style={{borderRadius: "50px", fontFamily: "'Dancing Script', cursive", fontSize: "20px"}}>Register</Button>
-          <span style={{borderRadius: "50px", fontFamily: "'Dancing Script', cursive", fontSize: "25px", color: "white"}}>Đã có tài khoản? → <Link to={"/login"} style={{textDecoration: "underline", color: "#FFA732"}}>Đăng nhập ngay</Link></span>
-        </Col>
-      </Row>
+            Button: {
+              hoverBorderColor: "#31c27c",
+              colorBorder: "#31c27c",
+            },
+          },
+        }}
+      >
+        <Row
+          gutter={[0, 15]}
+          justify={"center"}
+          align={"middle"}
+          style={{
+            padding: "20px",
+            borderRadius: "10px",
+            backdropFilter: "blur(15px)",
+            border: "1px solid #585858",
+          }}
+        >
+          <Col span={22} style={{ textAlign: "center" }}>
+            <span className={"Login__title"}>REGISTER</span>
+          </Col>
+          <Col span={22} style={{ textAlign: "start" }}></Col>
+          <Col span={22}>
+            <Tabs
+              items={[
+                {
+                  label: (
+                    <p
+                      style={{
+                        fontSize: "25px",
+                        color: "#31c27c",
+                        margin: 0,
+                      }}
+                    >
+                      Listener
+                    </p>
+                  ),
+                  key: "1",
+                  children: (
+                    <Form>
+                      <Col span={24}>
+                        <Form.Item>
+                          <Input
+                            size={"large"}
+                            addonBefore={
+                              <FaUser
+                                style={{ color: "#363a37", fontSize: 24 }}
+                              />
+                            }
+                            placeholder={"Username"}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={24}>
+                        <Form.Item>
+                          <Input.Password
+                            size={"large"}
+                            addonBefore={
+                              <FaLock
+                                style={{ color: "#363a37", fontSize: 24 }}
+                              />
+                            }
+                            placeholder={"Password"}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={24}>
+                        <Form.Item>
+                          <Input.Password
+                            size={"large"}
+                            addonBefore={
+                              <FaLockOpen
+                                style={{ color: "#363a37", fontSize: 24 }}
+                              />
+                            }
+                            placeholder={"Re-type password"}
+                          />
+                        </Form.Item>
+                      </Col>
+                    </Form>
+                  ),
+                },
+                {
+                  label: (
+                    <p
+                      style={{
+                        fontSize: "25px",
+                        color: "#31c27c",
+                        margin: 0,
+                      }}
+                    >
+                      Singer
+                    </p>
+                  ),
+                  key: "2",
+                  children: (
+                    <Form>
+                      <Col span={24}>
+                        <Form.Item>
+                          <Input
+                            size={"large"}
+                            addonBefore={
+                              <FaUser
+                                style={{ color: "#363a37", fontSize: 24 }}
+                              />
+                            }
+                            placeholder={"Username"}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={24}>
+                        <Form.Item>
+                          <Input.Password
+                            size={"large"}
+                            addonBefore={
+                              <FaLock
+                                style={{ color: "#363a37", fontSize: 24 }}
+                              />
+                            }
+                            placeholder={"Password"}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={24}>
+                        <Form.Item>
+                          <Input.Password
+                            size={"large"}
+                            addonBefore={
+                              <FaLockOpen
+                                style={{ color: "#363a37", fontSize: 24 }}
+                              />
+                            }
+                            placeholder={"Re-type password"}
+                          />
+                        </Form.Item>
+                      </Col>
+                    </Form>
+                  ),
+                },
+              ]}
+            />
+          </Col>
+          <Col
+            span={19}
+            style={{
+              borderRadius: "50px",
+              fontSize: "18px",
+              color: "#363a37",
+              marginTop: -24,
+              marginBottom: 24,
+              fontWeight: 600,
+            }}
+          >
+            <span
+              style={{
+                fontSize: 18,
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              Already have account? {"  "}
+              <Link
+                to={"/login"}
+                style={{ textDecoration: "underline", color: "#31c27c" }}
+              >
+                {" "}
+                Login here
+              </Link>
+            </span>
+          </Col>
+          <Col
+            span={24}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              className="btn-song-of-playlist"
+              size={"large"}
+              style={{
+                background: "#31c27c",
+                color: "#363a37",
+                width: "40%",
+                display: "flex",
+                justifyContent: "center",
+                fontSize: 24,
+              }}
+            >
+              Register
+            </Button>
+          </Col>
+        </Row>
+      </ConfigProvider>
     </>
   );
-}
+};
 
 export default Register;
