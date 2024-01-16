@@ -1,4 +1,4 @@
-import { del, get, post, put, uploadFile } from "../../utils";
+import {del, get, post, put, uploadFile} from "../../utils";
 
 export const getAllSong = async () => {
   return await get("song");
@@ -59,3 +59,7 @@ export const getSongPage = async (name = "", pageNo = 1, pageSize = 10) => {
 export const getTotalSong = async () => {
   return await get(`song/count`);
 };
+
+export const getTopSongWithMostListensByCategory = async () => {
+  return await get(`song/topByCategory`);
+}

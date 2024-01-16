@@ -28,9 +28,12 @@ const SingerProfile = () => {
   useEffect(() => {
     (async () => {
       setSingerProfile((await getUserById(singerId)).content);
-      setTotalTrack((await getAllSongBySingerId(singerId)).content);
-      setFollower(await getListFollower(authInfo.id));
-      setFollowing(await getFollowedSinger(authInfo.id));
+      const tmp = (await getAllSongBySingerId(singerId)).content;
+      console.log(tmp);
+      if (authInfo.id === parseInt(singerId)) setTotalTrack(tmp);
+      else setTotalTrack(tmp.filter(i => i.status === 2));
+      setFollower(await getListFollower(singerId));
+      setFollowing(await getFollowedSinger(singerId));
       const tmpObj = await getFollowedSinger(authInfo.id);
       const arrFollowed = tmpObj.content ? tmpObj.content : [];
       if (arrFollowed.findIndex((i) => i.id === parseInt(singerId)) !== -1)
@@ -79,7 +82,8 @@ const SingerProfile = () => {
                       src={singerProfile.avatar}
                       style={{
                         width: 200,
-                        height: 200,
+                        aspectRatio: "1/1",
+                        objectFit: "cover",
                         marginRight: 20,
                         borderRadius: "50%",
                         margin: "0px 30px 0px 30px",

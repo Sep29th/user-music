@@ -12,6 +12,7 @@ import {
   getFavoritePlaylistByUserId
 } from "../../../services/api/playlist/index.js";
 import {updateListPlaylist} from "../../../redux/actions/playlist/index.js";
+import LyricArea from "../../UI/LyricArea/index.jsx";
 
 const UserLayout = () => {
   const navigate = useNavigate();
@@ -59,6 +60,7 @@ const UserLayout = () => {
   }, []);
   return (
     <>
+      <LyricArea/>
       {/* header */}
       <Row gutter={[0, 15]} justify={"center"} style={{marginBottom: 16}}>
         <Col span={24} style={{backgroundColor: "#333333"}}>
@@ -82,7 +84,7 @@ const UserLayout = () => {
                     fontWeight: "700",
                   }}
                 >
-                  Sountify
+                  Soundtify
                 </NavLink>
               </Col>
               <Col

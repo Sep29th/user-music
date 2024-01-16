@@ -28,6 +28,19 @@
   color: #61dafb;
 }
 
+.imageHomePage__hover:hover {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 60px 40px -7px;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.carousel__mainpage {
+  padding: 50px;
+}
+
+.hover__decoration:hover {
+  text-decoration: underline;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^2.0.1",
     "animate.css": "^4.1.1",
     "antd": "^5.12.2",
+    "fast-average-color": "^9.4.0",
     "rc-virtual-list": "^3.11.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

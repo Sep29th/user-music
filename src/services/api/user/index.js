@@ -22,3 +22,7 @@ export const deleteUserById = async(id)=>{
 export const getTotalUser = async()=>{
     return await get(`user/count`)
 }
+
+export const getHistoryByUserId =async (userId)=>{
+    return await get(`click/history/user/${userId}`);
+}

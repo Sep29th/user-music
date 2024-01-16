@@ -4,17 +4,27 @@ import {FaPlay} from "react-icons/fa";
 import {IoIosMore} from "react-icons/io";
 import {MdOutlineQueueMusic} from "react-icons/md";
 import {useDispatch} from "react-redux";
-import {addOneSong, playOneSongNow} from "../../../redux/actions/songQueue/index.js";
+import {addSongList, playListSongNow} from "../../../redux/actions/songQueue/index.js";
+import {useEffect, useState} from "react";
+import {getAllSongByPlaylistId} from "../../../services/api/playlist/index.js";
+import {useNavigate} from "react-router-dom";
 
 const CardItemSongHomepage = (props) => {
-  const {itemSongOfPlaylist} = props;
+  const {itemPlaylist} = props;
   const dispatch = useDispatch();
+  const [listSongOfPlaylist, setListSongOfPlaylist] = useState([]);
+  const navigate = useNavigate();
   const handleAddSongToQueue = () => {
-    dispatch(addOneSong(itemSongOfPlaylist));
+    dispatch(addSongList(listSongOfPlaylist));
   }
   const handlePlayNow = () => {
-    dispatch(playOneSongNow(itemSongOfPlaylist));
+    dispatch(playListSongNow(listSongOfPlaylist));
   }
+  useEffect(() => {
+    (async () => {
+      setListSongOfPlaylist((await getAllSongByPlaylistId(itemPlaylist.id)).content);
+    })();
+  }, []);
   return (
     <div
       style={{
@@ -22,6 +32,7 @@ const CardItemSongHomepage = (props) => {
         padding: "15px",
         backgroundColor: "#f2f2f2",
         marginRight: "64px",
+        boxShadow: 'rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px'
       }}
     >
       <Card
@@ -35,24 +46,26 @@ const CardItemSongHomepage = (props) => {
         size="small"
         cover={
           <>
-            {itemSongOfPlaylist.avatar ?
+            {listSongOfPlaylist[0]?.avatar ?
               (
                 <img
                   alt="example"
-                  src={itemSongOfPlaylist.avatar}
+                  src={listSongOfPlaylist[0].avatar}
                   style={{
                     width: 160,
                     height: 160,
                   }}
+                  onClick={() => navigate(`/list-song-of-playlist/${itemPlaylist.id}`)}
                 />
               ) : (
                 <img
                   alt="example"
-                  src="https://play-lh.googleusercontent.com/D9X7m5dTNzjeSPxBqzh1RwrZLXJDFTpht9-8W8RJtiaOAlFxNvL5MnSDRxoDnQRYhz0"
+                  src="https://cdn.smehost.net/dailyrindblogcom-orchardprod/wp-content/uploads/2016/03/playlist2.png"
                   style={{
                     width: 160,
                     height: 160,
                   }}
+                  onClick={() => navigate(`/list-song-of-playlist/${itemPlaylist.id}`)}
                 />
               )
             }
@@ -90,7 +103,7 @@ const CardItemSongHomepage = (props) => {
                 alignItems: "center",
               }}
             >
-              <span style={{overflow: "hidden", textOverflow: "ellipsis"}}>{itemSongOfPlaylist.name}</span>
+              <span style={{overflow: "hidden", textOverflow: "ellipsis"}}>{itemPlaylist.name}</span>
               <Popover
                 content={
                   <div
@@ -127,16 +140,6 @@ const CardItemSongHomepage = (props) => {
               </Popover>
             </div>
           }
-          description={<span style={{
-            overflow: "hidden",
-            textOverflow: "ellipsis"
-          }}>{itemSongOfPlaylist.singers.length > 0 ?
-            (
-              itemSongOfPlaylist.singers.map(itemSingerOfSong => itemSingerOfSong.name).join(", ")
-            ) : (
-              <i style={{textDecoration: "underline"}}>Dont have singer</i>
-            )
-          }</span>}
           style={{padding: "0px 5px 5px 5px"}}
         />
       </Card>

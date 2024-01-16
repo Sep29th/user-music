@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import "./style.css";
 import {Button} from "antd";
 import {SlUserFollow, SlUserUnfollow} from "react-icons/sl";

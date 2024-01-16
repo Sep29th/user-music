@@ -31,12 +31,11 @@ const CardSongItem = (props) => {
               }}
             >
               <div>
-                <a href="" className="display-name-song-of-playlist">
+                <a className="display-name-song-of-playlist">
                   {item.name}
                 </a>
                 {" - "}
                 <a
-                  href=""
                   className="display-name-singer-of-playlist"
                   style={{color: "#999999", fontWeight: "300"}}
                 >

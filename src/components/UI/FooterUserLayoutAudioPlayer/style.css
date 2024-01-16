@@ -1,10 +1,11 @@
 .music-player-lyric {
   width: auto !important;
-  background-color: #646464 !important;
+  /*background-color: #646464 !important;*/
   left: 20px !important;
   bottom: 100px !important;
-  font-size: 20px !important;
+  font-size: 26px !important;
 }
 .hover-decoration:hover {
-  text-decoration: underline;
+  font-weight: 700;
+  transition: font-weight, font-size 0.2s ease-in-out;
 }

@@ -1,19 +1,32 @@
 import {useEffect, useState} from "react";
-import {FaPlay} from "react-icons/fa";
+import {FaLock, FaLockOpen, FaPlay} from "react-icons/fa";
 import "./style.css";
 import {Button, Tooltip} from "antd";
 import {PiQueueFill} from "react-icons/pi";
-import {getAllSongByPlaylistId} from "../../../services/api/playlist/index.js";
+import {getAllSongByPlaylistId, updatePlaylist} from "../../../services/api/playlist/index.js";
 import {useNavigate} from "react-router-dom";
 import {addSongList, playListSongNow} from "../../../redux/actions/songQueue/index.js";
 import {useDispatch} from "react-redux";
+import {updateOnePlaylistOfListPlaylist} from "../../../redux/actions/playlist/index.js";
 
 const CardPlaylistOfLibrary = (props) => {
   const {item} = props;
   const [isHovered, setIsHovered] = useState(false);
   const [allSong, setAllSong] = useState({});
+  const [isPublic, setIsPublic] = useState(item.status);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const statusPlaylistChangeTo = (targetStatus) => {
+    (async () => {
+      const playlistAfterUpdate = (await updatePlaylist({
+        id: item.id,
+        name: item.name,
+        status: targetStatus
+      })).content;
+      dispatch(updateOnePlaylistOfListPlaylist(playlistAfterUpdate));
+      setIsPublic(!isPublic);
+    })();
+  }
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -72,6 +85,35 @@ const CardPlaylistOfLibrary = (props) => {
                 right: 10,
               }}
             >
+              {!isPublic ? (
+                <Tooltip
+                  placement="left"
+                  title={<span style={{color: "#222222"}}>set to public</span>}
+                  color={"#fff"}
+                >
+                  <Button
+                    size={"small"}
+                    className="btn-song-of-playlist"
+                    onClick={() => statusPlaylistChangeTo(true)}
+                  >
+                    <FaLock/>
+                  </Button>
+                </Tooltip>
+              ) : (
+                <Tooltip
+                  placement="left"
+                  title={<span style={{color: "#222222"}}>set to private</span>}
+                  color={"#fff"}
+                >
+                  <Button
+                    size={"small"}
+                    className="btn-song-of-playlist"
+                    onClick={() => statusPlaylistChangeTo(false)}
+                  >
+                    <FaLockOpen/>
+                  </Button>
+                </Tooltip>
+              )}
               <Tooltip
                 placement="bottomLeft"
                 title={<span style={{color: "#222222"}}>Add to queue</span>}

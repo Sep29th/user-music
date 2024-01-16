@@ -18,7 +18,12 @@ import {
 } from "../../../redux/actions/favorite/index.js";
 
 const GroupButtonOfSongItem = (props) => {
-  const {songTarget, playlistDetail, listSongOfPlayList, setListSongOfPlaylist} = props;
+  const {
+    songTarget,
+    playlistDetail,
+    listSongOfPlayList,
+    setListSongOfPlaylist
+  } = props;
   const authInfo = useSelector(state => state.auth);
   const favoriteList = useSelector(state => state.favorite);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +31,7 @@ const GroupButtonOfSongItem = (props) => {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const handlePlaynow = () => {
+  const handlePlayNow = () => {
     dispatch(playOneSongNow(songTarget));
   }
   const handleAddToQueue = () => {
@@ -55,7 +60,7 @@ const GroupButtonOfSongItem = (props) => {
         title={<span style={{color: "#222222"}}>Play now</span>}
         color={"#fff"}
       >
-        <Button size={"small"} className="btn-song-of-playlist" onClick={handlePlaynow}>
+        <Button size={"small"} className="btn-song-of-playlist" onClick={handlePlayNow}>
           <IoMdPlay/>
         </Button>
       </Tooltip>
@@ -82,7 +87,6 @@ const GroupButtonOfSongItem = (props) => {
           </Tooltip>
         )
       }
-
       <Tooltip
         placement="topLeft"
         title={<span style={{color: "#222222"}}>Add to queue</span>}
@@ -92,7 +96,6 @@ const GroupButtonOfSongItem = (props) => {
           <PiQueueFill/>
         </Button>
       </Tooltip>
-
       <Tooltip
         placement="topRight"
         title={<span style={{color: "#222222"}}>Add to playlist</span>}

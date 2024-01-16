@@ -14,24 +14,22 @@ const ManageTracksOfSinger = (props) => {
     })()
   }, [authInfo.id, reload]);
   return (
-    <>
-      <Row>
-        <Col>
-          <h2>Your tracks</h2>
-        </Col>
-        <Col span={24}>
-          <Divider/>
-        </Col>
-        <Col span={24}>
-          <List
-            size="small"
-            itemLayout="horizontal"
-            dataSource={listTrack}
-            renderItem={(item, index) => <CardSongEditOfSinger item={item} key={index}/>}
-          />
-        </Col>
-      </Row>
-    </>
+    <Row style={{marginBottom: 100}}>
+      <Col>
+        <h2>Your tracks</h2>
+      </Col>
+      <Col span={24}>
+        <Divider/>
+      </Col>
+      <Col span={24}>
+        <List
+          size="small"
+          itemLayout="horizontal"
+          dataSource={listTrack}
+          renderItem={(item, index) => <CardSongEditOfSinger item={item} listTrack={listTrack} setListTrack={setListTrack} key={index}/>}
+        />
+      </Col>
+    </Row>
   );
 };
 

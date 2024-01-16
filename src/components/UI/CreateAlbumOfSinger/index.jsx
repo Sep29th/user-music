@@ -38,12 +38,9 @@ const CreateAlbumOfSinger = () => {
         name: value.name,
         singer: {id: authInfo.id},
         songs: listChoosed.map(i => {
-          return {
-            id: i.id
-          }
+          return {id: i.id}
         })
-      })
-      ;
+      });
       form.resetFields();
       setListChoosed([]);
       setListSearch([]);

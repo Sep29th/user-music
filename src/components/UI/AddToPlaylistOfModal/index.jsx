@@ -3,15 +3,26 @@ import {useEffect, useState} from "react";
 import {FaLock, FaLockOpen} from "react-icons/fa";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {useDispatch, useSelector} from "react-redux";
-import {addSongToPlaylist, getAllSongByPlaylistId} from "../../../services/api/playlist/index.js";
+import {addSongToPlaylist, getAllSongByPlaylistId, updatePlaylist} from "../../../services/api/playlist/index.js";
 import {updateOnePlaylistOfListPlaylist} from "../../../redux/actions/playlist/index.js";
 
 const ItemPlaylist = (props) => {
   const {item, songTarget} = props;
-  const [status, setStatus] = useState(false);
   const [allSongOfPlaylist, setAllSongOfPlaylist] = useState([]);
+  const [isPublic, setIsPublic] = useState(item.status);
   const dispatch = useDispatch();
   const [isAdded, setIsAdded] = useState(false);
+  const statusPlaylistChangeTo = (targetStatus) => {
+    (async () => {
+      const playlistAfterUpdate = (await updatePlaylist({
+        id: item.id,
+        name: item.name,
+        status: targetStatus
+      })).content;
+      dispatch(updateOnePlaylistOfListPlaylist(playlistAfterUpdate));
+      setIsPublic(!isPublic);
+    })();
+  }
   const handleAddToPlaylist = () => {
     (async () => {
       const newData = (await addSongToPlaylist(item.id, songTarget.id)).content;
@@ -79,7 +90,7 @@ const ItemPlaylist = (props) => {
           marginRight: 8,
         }}
       >
-        {status ? (
+        {!isPublic ? (
           <Tooltip
             placement="left"
             title={<span style={{color: "#222222"}}>set to public</span>}
@@ -88,9 +99,9 @@ const ItemPlaylist = (props) => {
             <Button
               size={"small"}
               className="btn-song-of-playlist"
-              onClick={() => setStatus(!status)}
+              onClick={() => statusPlaylistChangeTo(true)}
             >
-              <FaLockOpen/>
+              <FaLock/>
             </Button>
           </Tooltip>
         ) : (
@@ -102,9 +113,9 @@ const ItemPlaylist = (props) => {
             <Button
               size={"small"}
               className="btn-song-of-playlist"
-              onClick={() => setStatus(!status)}
+              onClick={() => statusPlaylistChangeTo(false)}
             >
-              <FaLock/>
+              <FaLockOpen/>
             </Button>
           </Tooltip>
         )}

@@ -40,6 +40,13 @@ const UploadSongOfSinger = (props) => {
     }
   });
   const optionSinger = listSinger.map((i) => {
+    if (i.id === authInfo.id) {
+      return {
+        value: i.id,
+        label: i.name,
+        disabled: true
+      }
+    }
     return {
       value: i.id,
       label: i.name
@@ -53,23 +60,20 @@ const UploadSongOfSinger = (props) => {
       form1.append("lyric", values.filelyric.file);
       form1.append("avatar", values.thumbnail[0].originFileObj);
       const linkS3 = (await uploadFileSound(form1)).content;
-      await saveSong({
+      const newSong = await saveSong({
         name: values.name,
         fileSound: linkS3.sound,
         fileLyric: linkS3.lyric,
         avatar: linkS3.avatar,
         creator: {id: authInfo.id},
-        singer: values.singers.map(i => {
-          return {
-            id: i
-          }
+        singers: values.singers.map(i => {
+          return {id: i}
         }),
         categories: values.category.map(i => {
-          return {
-            id: i
-          }
+          return {id: i}
         })
       });
+      console.log(newSong);
       setLoading(false);
       form.resetFields();
       setSourceSound(null);
@@ -130,7 +134,7 @@ const UploadSongOfSinger = (props) => {
                   </p>
                 </Dragger>
               </Form.Item>
-              {sourceSound && <audio controls src={sourceSound}/>}
+              {sourceSound && <audio controls src={sourceSound} style={{width: "100%"}}/>}
               <Form.Item name={"name"} label="Name" rules={[{required: true}]}>
                 <Input/>
               </Form.Item>
@@ -153,6 +157,7 @@ const UploadSongOfSinger = (props) => {
                   style={{
                     width: "100%",
                   }}
+                  defaultValue={[authInfo.id]}
                   filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
                   placeholder="Please select singer"
                   options={optionSinger}
@@ -177,7 +182,8 @@ const UploadSongOfSinger = (props) => {
                     return false;
                   }}
                   showUploadList={false}
-                  listType="picture-card">
+                  listType="picture-card"
+                >
                   <button
                     style={{
                       border: 0,

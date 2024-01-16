@@ -1,16 +1,32 @@
 import {Avatar, List} from "antd";
-import Search from "antd/es/input/Search";
 import {useEffect, useState} from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import "./style.css";
-import {getAllPlaylistByUserId} from "../../../services/api/playlist/index.js";
+import {getAllPlaylistByUserId, getAllSongByPlaylistId} from "../../../services/api/playlist/index.js";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {getFollowedSinger} from "../../../services/api/singer/index.js";
+import SearchInputSelect from "../SearchInputSelect/index.jsx";
 
+const GetAvatarSource = (props) => {
+  const {item} = props;
+  const [avatarSrc, setAvatarSrc] = useState("https://w7.pngwing.com/pngs/365/675/png-transparent-spotify-playlist-things-to-ruin-the-songs-of-joe-iconis-original-cast-recording-be-more-chill-black-and-white-spotify-logo-area-symbol-spotify.png");
+  useEffect(() => {
+    (async () => {
+      const data = (await getAllSongByPlaylistId(item.id)).content[0].avatar;
+      if (data) setAvatarSrc(data);
+    })();
+  }, []);
+  return (
+    <Avatar
+      shape={"square"}
+      size={"large"}
+      src={avatarSrc}
+    />
+  );
+}
 const RightSideBarHomePage = () => {
   const authInfo = useSelector(state => state.auth);
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
   const navigate = useNavigate();
   const [playlist, setPlaylist] = useState({});
   const [singerFollowed, setSingerFollowed] = useState({});
@@ -22,12 +38,7 @@ const RightSideBarHomePage = () => {
   }, []);
   return (
     <div style={{position: "sticky", top: "15px"}}>
-      <Search
-        placeholder="Search"
-        onSearch={onSearch}
-        size={"large"}
-        style={{width: "100%"}}
-      />
+      <SearchInputSelect/>
       <br/>
       <br/>
       <hr/>
@@ -71,7 +82,6 @@ const RightSideBarHomePage = () => {
           />
         </InfiniteScroll>
       </div>
-
       <br/>
       <hr/>
       <h3>Your Playlist</h3>
@@ -95,13 +105,7 @@ const RightSideBarHomePage = () => {
               <List.Item key={item.id}>
                 <List.Item.Meta
                   avatar={
-                    <Avatar
-                      shape={"square"}
-                      size={"large"}
-                      src={
-                        "https://w7.pngwing.com/pngs/365/675/png-transparent-spotify-playlist-things-to-ruin-the-songs-of-joe-iconis-original-cast-recording-be-more-chill-black-and-white-spotify-logo-area-symbol-spotify.png"
-                      }
-                    />
+                    <GetAvatarSource item={item}/>
                   }
                   title={<a onClick={() => navigate(`/list-song-of-playlist/${item.id}`)}>{item.name}</a>}
                   description={`release date: ${item.createdDate.slice(0, 10)}`}

@@ -4,41 +4,47 @@ import {MdQueuePlayNext} from "react-icons/md";
 import {useEffect, useState} from "react";
 import GroupButtonOfSongItem from "../../components/UI/GroupButtonOfSongItem";
 import {useNavigate, useParams} from "react-router-dom";
-import {getAllSongByPlaylistId, getPlaylistByPlaylistId} from "../../services/api/playlist/index.js";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {addSongList, playListSongNow} from "../../redux/actions/songQueue/index.js";
+import {getAlbumById} from "../../services/api/album/index.js";
 
 const ListSongOfAlbum = () => {
-  const {playlistId} = useParams();
-  const [playlistDetail, setPlaylistDetail] = useState({id: playlistId});
-  const [listSongOfPlayList, setListSongOfPlaylist] = useState([]);
+  const {albumId} = useParams();
+  const authInfo = useSelector(state => state.auth);
+  const [albumDetail, setAlbumDetail] = useState({id: albumId});
+  const [listSongOfAlbum, setListSongOfAlbum] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handlePlaylistSongNow = () => {
-    dispatch(playListSongNow(listSongOfPlayList));
+  const handlePlayAlbumNow = () => {
+    dispatch(playListSongNow(listSongOfAlbum));
   }
-  const handleAddPlaylistToQueue = () => {
-    dispatch(addSongList(listSongOfPlayList));
+  const handleAddAlbumToQueue = () => {
+    dispatch(addSongList(listSongOfAlbum));
   }
   useEffect(() => {
     (async () => {
-      setPlaylistDetail((await getPlaylistByPlaylistId(playlistId)).content);
-      setListSongOfPlaylist((await getAllSongByPlaylistId(playlistId)).content);
+      const data = (await getAlbumById(albumId)).content;
+      setAlbumDetail(data);
+      if (authInfo.id === data.singer.id) {
+        setListSongOfAlbum(data.songs);
+      }
+      else setListSongOfAlbum(data.songs.filter(i => i.status === 2));
     })();
-  }, [playlistId]);
+  }, [albumId]);
   return (
     <>
       <Row justify={"center"}>
-        <Col span={20}>
+        <Col span={18}>
           <div
             style={{
               backgroundImage: "linear-gradient(90deg, #847983, #302c2d)",
               height: 380,
+              borderRadius: "9px"
             }}
           >
             <Row style={{height: "100%"}} justify="space-between">
               <Col
-                span={16}
+                span={7}
                 style={{
                   padding: 25,
                   display: "flex",
@@ -61,7 +67,7 @@ const ListSongOfAlbum = () => {
                       shape="circle"
                       icon={<FaPlay style={{fontSize: 32}}/>}
                       size="large"
-                      onClick={handlePlaylistSongNow}
+                      onClick={handlePlayAlbumNow}
                       style={{
                         padding: 30,
                         display: "flex",
@@ -80,7 +86,7 @@ const ListSongOfAlbum = () => {
                       letterSpacing: 1,
                     }}
                   >
-                    {playlistDetail.name}
+                    {albumDetail.name}
                   </span>
                 </div>
 
@@ -105,7 +111,7 @@ const ListSongOfAlbum = () => {
                     <span
                       style={{color: "#fff", fontSize: 36, fontWeight: 500}}
                     >
-                      {listSongOfPlayList.length}
+                      {listSongOfAlbum.length}
                     </span>
                     <br/>
                     <span style={{color: "#fff", fontSize: 18}}>TRACKS</span>
@@ -114,14 +120,46 @@ const ListSongOfAlbum = () => {
                   <Button
                     className={"btn-song-of-playlist"}
                     style={{display: "flex", gap: 10, alignItems: "center"}}
-                    onClick={handleAddPlaylistToQueue}
+                    onClick={handleAddAlbumToQueue}
                   >
                     <MdQueuePlayNext/>
                     Add to next up
                   </Button>
                 </div>
               </Col>
-
+              <Col span={10} style={{display: "flex", justifyContent: "end", padding: "18px 0"}}>
+                <div style={{display: "flex", flexDirection: "column", alignItems: "end"}}>
+                  {albumDetail.singer &&
+                    <>
+                      <img
+                        style={{
+                          width: 160,
+                          aspectRatio: "1/1",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          cursor: "pointer"
+                        }}
+                        onClick={() => navigate(`/singer-profile/${albumDetail.singer.id}`)}
+                        className={"imageHomePage__hover"}
+                        src={albumDetail.singer.avatar}
+                        alt={"singer-avatar"}
+                        title={albumDetail.singer.name}
+                      />
+                      <h3
+                        onClick={() => navigate(`/singer-profile/${albumDetail.singer.id}`)}
+                        className={"hover__decoration"}
+                        style={{color: "white", cursor: "pointer"}}
+                      >
+                        {albumDetail.singer.name}
+                        <span
+                          style={{fontSize: 14, color: "#cccccc"}}> - {albumDetail.singer.nickName}
+                        </span>
+                      </h3>
+                      <p style={{color: "#cccccc", textAlign: "right"}}>{albumDetail.singer.bio}</p>
+                    </>
+                  }
+                </div>
+              </Col>
               <Col
                 span={7}
                 style={{
@@ -130,39 +168,26 @@ const ListSongOfAlbum = () => {
                   justifyContent: "end",
                 }}
               >
-                {
-                  listSongOfPlayList[0]?.avatar ?
-                    (
-                      <img
-                        src={listSongOfPlayList[0].avatar}
-                        style={{
-                          width: 340,
-                          height: 340,
-                          marginRight: 20,
-                        }}
-                      />
-                    ) : (
-                      <img
-                        src="https://cdn.smehost.net/dailyrindblogcom-orchardprod/wp-content/uploads/2016/03/playlist2.png"
-                        style={{
-                          width: 340,
-                          height: 340,
-                          marginRight: 20,
-                        }}
-                      />
-                    )
-                }
+                <img
+                  src={albumDetail.thumbnail}
+                  style={{
+                    width: 340,
+                    aspectRatio: "1/1",
+                    objectFit: "cover",
+                    marginRight: 20,
+                  }}
+                />
               </Col>
             </Row>
           </div>
         </Col>
       </Row>
       <Row justify={"center"}>
-        <Col span={20}>
+        <Col span={15}>
           <List
-            size="small"
+            size="medium"
             itemLayout="horizontal"
-            dataSource={listSongOfPlayList}
+            dataSource={listSongOfAlbum}
             renderItem={(item, index) => (
               <a className="song-item-list-a" key={index}>
                 <List.Item className="song-item-list-a">
@@ -199,9 +224,9 @@ const ListSongOfAlbum = () => {
                             className="display-name-singer-of-playlist"
                             style={{color: "#999999", fontWeight: "300"}}
                           >
-                            {item.singers.map((i, ind) => <span onClick={() => navigate(`/singer-profile/${i.id}`)}
-                                                                key={ind}
-                                                                className={"hover-decoration"}>{`${i.name}, `}</span>)}
+                            {item?.singers?.map((i, ind) => <span onClick={() => navigate(`/singer-profile/${i.id}`)}
+                                                                  key={ind}
+                                                                  className={"hover-decoration"}>{`${i.name}, `}</span>)}
                           </a>
                         </div>
 
@@ -211,9 +236,7 @@ const ListSongOfAlbum = () => {
                             gap: 10,
                           }}
                         >
-                          <GroupButtonOfSongItem songTarget={item} playlistDetail={playlistDetail}
-                                                 listSongOfPlayList={listSongOfPlayList}
-                                                 setListSongOfPlaylist={setListSongOfPlaylist}/>
+                          <GroupButtonOfSongItem songTarget={item}/>
                         </div>
                       </div>
                     }

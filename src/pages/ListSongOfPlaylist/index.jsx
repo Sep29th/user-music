@@ -35,11 +35,12 @@ const ListSongOfPlaylist = () => {
   return (
     <>
       <Row justify={"center"}>
-        <Col span={20}>
+        <Col span={18}>
           <div
             style={{
               backgroundImage: "linear-gradient(90deg, #847983, #302c2d)",
               height: 380,
+              borderRadius: "9px"
             }}
           >
             <Row style={{height: "100%"}} justify="space-between">
@@ -163,9 +164,9 @@ const ListSongOfPlaylist = () => {
         </Col>
       </Row>
       <Row justify={"center"}>
-        <Col span={20}>
+        <Col span={15}>
           <List
-            size="small"
+            size="medium"
             itemLayout="horizontal"
             dataSource={listSongOfPlayList}
             renderItem={(item, index) => (
