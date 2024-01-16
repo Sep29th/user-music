@@ -75,7 +75,6 @@ const UploadSongOfSinger = (props) => {
         fileSound: linkS3.sound,
         fileLyric: linkS3.lyric,
         avatar: linkS3.avatar,
-<<<<<<< HEAD
         creator: {id: authInfo.id},
         singers: values.singers.map(i => {
           return {id: i}
@@ -83,19 +82,6 @@ const UploadSongOfSinger = (props) => {
         categories: values.category.map(i => {
           return {id: i}
         })
-=======
-        creator: { id: authInfo.id },
-        singer: values.singers.map((i) => {
-          return {
-            id: i,
-          };
-        }),
-        categories: values.category.map((i) => {
-          return {
-            id: i,
-          };
-        }),
->>>>>>> main
       });
       console.log(newSong);
       setLoading(false);
@@ -161,19 +147,9 @@ const UploadSongOfSinger = (props) => {
                   </p>
                 </Dragger>
               </Form.Item>
-<<<<<<< HEAD
               {sourceSound && <audio controls src={sourceSound} style={{width: "100%"}}/>}
               <Form.Item name={"name"} label="Name" rules={[{required: true}]}>
                 <Input/>
-=======
-              {sourceSound && <audio controls src={sourceSound} />}
-              <Form.Item
-                name={"name"}
-                label="Name"
-                rules={[{ required: true }]}
-              >
-                <Input />
->>>>>>> main
               </Form.Item>
               <Form.Item
                 name={"category"}
@@ -202,16 +178,8 @@ const UploadSongOfSinger = (props) => {
                   style={{
                     width: "100%",
                   }}
-<<<<<<< HEAD
                   defaultValue={[authInfo.id]}
                   filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-=======
-                  filterOption={(input, option) =>
-                    (option?.label ?? "")
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
->>>>>>> main
                   placeholder="Please select singer"
                   options={optionSinger}
                 />
