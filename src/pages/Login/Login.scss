@@ -2,12 +2,32 @@
 
 .Login {
   &__title {
-    font-family: 'Dancing Script', cursive;
+    //font-family: 'Dancing Script', cursive;
     color: white;
     font-size: 35px;
   }
 }
 
 .ant-input-focused {
-  outline-color: black !important;
+  //outline-color: black !important;
+}
+
+.ant-input:focus{
+  box-shadow: 0 0 0 1px #31c27c !important
+}
+
+.ant-input-affix-wrapper:focus{
+  box-shadow: 0 0 0 1px #31c27c !important
+  
+}
+
+.ant-input-affix-wrapper.ant-input-affix-wrapper-lg.css-dev-only-do-not-override-1kq1gb5{
+
+  border: #31c27c;
+
+}
+
+.Login__title{
+  font-weight: 900;
+  color: #31c27c;
 }

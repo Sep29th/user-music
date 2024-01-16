@@ -1,13 +1,23 @@
-import {Button, Col, ConfigProvider, Form, Input, notification, Row, Select, Upload} from "antd";
+import {
+  Button,
+  Col,
+  ConfigProvider,
+  Form,
+  Input,
+  notification,
+  Row,
+  Select,
+  Upload,
+} from "antd";
 import Dragger from "antd/es/upload/Dragger";
-import {useEffect, useState} from "react";
-import {IoCloudUploadOutline} from "react-icons/io5";
-import {PlusOutlined} from "@ant-design/icons";
-import {LuUpload} from "react-icons/lu";
-import {getAllCategory} from "../../../services/api/category/index.js";
-import {getAllActiveSinger} from "../../../services/api/singer/index.js";
-import {saveSong, uploadFileSound} from "../../../services/api/song/index.js";
-import {useSelector} from "react-redux";
+import { useEffect, useState } from "react";
+import { IoCloudUploadOutline } from "react-icons/io5";
+import { PlusOutlined } from "@ant-design/icons";
+import { LuUpload } from "react-icons/lu";
+import { getAllCategory } from "../../../services/api/category/index.js";
+import { getAllActiveSinger } from "../../../services/api/singer/index.js";
+import { saveSong, uploadFileSound } from "../../../services/api/song/index.js";
+import { useSelector } from "react-redux";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -15,10 +25,10 @@ const normFile = (e) => {
   }
   return e?.fileList;
 };
-const key = 'updatable';
+const key = "updatable";
 const UploadSongOfSinger = (props) => {
-  const {reload, setReload} = props;
-  const authInfo = useSelector(state => state.auth);
+  const { reload, setReload } = props;
+  const authInfo = useSelector((state) => state.auth);
   const [listCategory, setListCategory] = useState([]);
   const [listSinger, setListSinger] = useState([]);
   const [sourceSound, setSourceSound] = useState(null);
@@ -27,7 +37,7 @@ const UploadSongOfSinger = (props) => {
   const [loading, setLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
   const openNotification = (title, description) => {
-    api['success']({
+    api["success"]({
       key,
       message: title,
       description: description,
@@ -36,8 +46,8 @@ const UploadSongOfSinger = (props) => {
   const optionCategory = listCategory.map((i) => {
     return {
       value: i.id,
-      label: i.name
-    }
+      label: i.name,
+    };
   });
   const optionSinger = listSinger.map((i) => {
     if (i.id === authInfo.id) {
@@ -49,8 +59,8 @@ const UploadSongOfSinger = (props) => {
     }
     return {
       value: i.id,
-      label: i.name
-    }
+      label: i.name,
+    };
   });
   const onFinish = (values) => {
     (async () => {
@@ -65,6 +75,7 @@ const UploadSongOfSinger = (props) => {
         fileSound: linkS3.sound,
         fileLyric: linkS3.lyric,
         avatar: linkS3.avatar,
+<<<<<<< HEAD
         creator: {id: authInfo.id},
         singers: values.singers.map(i => {
           return {id: i}
@@ -72,21 +83,37 @@ const UploadSongOfSinger = (props) => {
         categories: values.category.map(i => {
           return {id: i}
         })
+=======
+        creator: { id: authInfo.id },
+        singer: values.singers.map((i) => {
+          return {
+            id: i,
+          };
+        }),
+        categories: values.category.map((i) => {
+          return {
+            id: i,
+          };
+        }),
+>>>>>>> main
       });
       console.log(newSong);
       setLoading(false);
       form.resetFields();
       setSourceSound(null);
       setThumbnailSrc(null);
-      openNotification("Thêm thành công", "Vào danh mục bài hát của bạn để xem chi tiết");
+      openNotification(
+        "Thêm thành công",
+        "Vào danh mục bài hát của bạn để xem chi tiết"
+      );
       setReload(!reload);
-    })()
-  }
+    })();
+  };
   useEffect(() => {
     (async () => {
       setListCategory((await getAllCategory()).content);
       setListSinger((await getAllActiveSinger()).content);
-    })()
+    })();
   }, []);
   return (
     <>
@@ -112,14 +139,14 @@ const UploadSongOfSinger = (props) => {
               <h2>Upload your music & audio and share.</h2>
             </Col>
             <Col span={12}>
-              <Form.Item rules={[{required: true}]} name={"mp3"}>
+              <Form.Item rules={[{ required: true }]} name={"mp3"}>
                 <Dragger
                   multiple={false}
                   beforeUpload={(file) => {
                     const reader = new FileReader();
-                    reader.onload = e => {
+                    reader.onload = (e) => {
                       setSourceSound(e.target?.result + "");
-                    }
+                    };
                     reader.readAsDataURL(file);
                     return false;
                   }}
@@ -127,18 +154,32 @@ const UploadSongOfSinger = (props) => {
                   accept="audio/*"
                 >
                   <p className="ant-upload-drag-icon">
-                    <IoCloudUploadOutline style={{fontSize: 60}}/>
+                    <IoCloudUploadOutline style={{ fontSize: 60 }} />
                   </p>
                   <p className="ant-upload-text">
                     Click or drag song file to this area to upload
                   </p>
                 </Dragger>
               </Form.Item>
+<<<<<<< HEAD
               {sourceSound && <audio controls src={sourceSound} style={{width: "100%"}}/>}
               <Form.Item name={"name"} label="Name" rules={[{required: true}]}>
                 <Input/>
+=======
+              {sourceSound && <audio controls src={sourceSound} />}
+              <Form.Item
+                name={"name"}
+                label="Name"
+                rules={[{ required: true }]}
+              >
+                <Input />
+>>>>>>> main
               </Form.Item>
-              <Form.Item name={"category"} label="Category" rules={[{required: true}]}>
+              <Form.Item
+                name={"category"}
+                label="Category"
+                rules={[{ required: true }]}
+              >
                 <Select
                   mode="multiple"
                   allowClear
@@ -150,22 +191,34 @@ const UploadSongOfSinger = (props) => {
                 />
               </Form.Item>
 
-              <Form.Item name={"singers"} label="Collab Singer" rules={[{required: true}]}>
+              <Form.Item
+                name={"singers"}
+                label="Collab Singer"
+                rules={[{ required: true }]}
+              >
                 <Select
                   mode="multiple"
                   allowClear
                   style={{
                     width: "100%",
                   }}
+<<<<<<< HEAD
                   defaultValue={[authInfo.id]}
                   filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+=======
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+>>>>>>> main
                   placeholder="Please select singer"
                   options={optionSinger}
                 />
               </Form.Item>
 
               <Form.Item
-                rules={[{required: true}]}
+                rules={[{ required: true }]}
                 label="Upload Thumbnail"
                 valuePropName="fileList"
                 getValueFromEvent={normFile}
@@ -175,9 +228,9 @@ const UploadSongOfSinger = (props) => {
                   multiple={false}
                   beforeUpload={(file) => {
                     const reader = new FileReader();
-                    reader.onload = e => {
+                    reader.onload = (e) => {
                       setThumbnailSrc(e.target?.result + "");
-                    }
+                    };
                     reader.readAsDataURL(file);
                     return false;
                   }}
@@ -191,7 +244,7 @@ const UploadSongOfSinger = (props) => {
                     }}
                     type="button"
                   >
-                    <PlusOutlined/>
+                    <PlusOutlined />
                     <div
                       style={{
                         marginTop: 8,
@@ -202,10 +255,17 @@ const UploadSongOfSinger = (props) => {
                   </button>
                 </Upload>
               </Form.Item>
-              {thumbnailSrc &&
-                <img style={{width: 250, height: 250, aspectRatio: "1/1"}}
-                     src={thumbnailSrc}/>}
-              <Form.Item label="Upload lyrics" name={"filelyric"} rules={[{required: true}]}>
+              {thumbnailSrc && (
+                <img
+                  style={{ width: 250, height: 250, aspectRatio: "1/1" }}
+                  src={thumbnailSrc}
+                />
+              )}
+              <Form.Item
+                label="Upload lyrics"
+                name={"filelyric"}
+                rules={[{ required: true }]}
+              >
                 <Upload
                   multiple={false}
                   beforeUpload={() => {
@@ -213,13 +273,17 @@ const UploadSongOfSinger = (props) => {
                   }}
                   accept=".lrc"
                 >
-                  <Button icon={<LuUpload/>}>Click to upload lyrics file</Button>
+                  <Button icon={<LuUpload />}>
+                    Click to upload lyrics file
+                  </Button>
                 </Upload>
               </Form.Item>
 
-              <Form.Item style={{display: "flex", justifyContent: "end"}}>
-                <div style={{display: "flex", gap: 10}}>
-                  <Button type="primary" htmlType={"submit"} loading={loading}>Submit</Button>
+              <Form.Item style={{ display: "flex", justifyContent: "end" }}>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <Button type="primary" htmlType={"submit"} loading={loading}>
+                    Submit
+                  </Button>
                   <Button>Cancel</Button>
                 </div>
               </Form.Item>
