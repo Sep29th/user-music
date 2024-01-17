@@ -91,7 +91,7 @@ const FooterUserLayoutAudioPlayer = () => {
         showDownload={false}
         showThemeSwitch={false}
         showReload={false}
-        defaultPosition={{right: 80, bottom: 10}}
+        defaultPosition={{left: 5, bottom: 5}}
         quietUpdate={true}
         clearPriorAudioLists={songQueue.clearPriorAudioLists}
       />

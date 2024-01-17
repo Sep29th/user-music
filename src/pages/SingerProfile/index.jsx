@@ -186,7 +186,7 @@ const SingerProfile = () => {
               <Statistic title="Following" value={following.content ? following.content.length : 0}/>
             </Col>
             <Col span={8}>
-              <Statistic title="Tracks" value={totalTrack.length}/>
+              <Statistic title="Tracks" value={totalTrack?.length}/>
             </Col>
 
             <Col span={24}>

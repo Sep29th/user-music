@@ -1,8 +1,29 @@
-import { Button, Col, ConfigProvider, Form, Input, Row } from "antd";
+import { Alert, Button, Col, ConfigProvider, Form, Input, Row } from "antd";
 import "./Login.scss";
 import { FaLock, FaUser } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { userLogin } from "../../services/api/auth";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/actions/auth";
 const Login = () => {
+  const [alert, setAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const onFinish = (values) => {
+    (async () => {
+      setLoading(true);
+      console.log(values);
+      const infomation = await userLogin(values);
+      if (infomation.status === "BAD_REQUEST") setAlert(infomation.message);
+      else {
+        dispatch(login(infomation.content));
+        navigate("/");
+      }
+      setLoading(false);
+    })();
+  }
   return (
     <ConfigProvider
       theme={{
@@ -29,7 +50,7 @@ const Login = () => {
         },
       }}
     >
-      <Form>
+      <Form onFinish={onFinish}>
         <Row
           gutter={[0, 20]}
           justify={"center"}
@@ -46,24 +67,24 @@ const Login = () => {
             <span className={"Login__title"}>USER LOGIN</span>
           </Col>
           <Col span={24}>
-            <Form.Item>
+            <Form.Item rules={[{ required: true }]} name={"email"}>
               <Input
                 size={"large"}
                 addonBefore={
                   <FaUser style={{ color: "#363a37", fontSize: 24 }} />
                 }
-                placeholder={"username"}
+                placeholder={"Email"}
               />
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item>
+            <Form.Item rules={[{ required: true }]} name={"password"}>
               <Input.Password
                 size={"large"}
                 addonBefore={
                   <FaLock style={{ color: "#363a37", fontSize: 24 }} />
                 }
-                placeholder={"password"}
+                placeholder={"Password"}
               />
             </Form.Item>
           </Col>
@@ -94,6 +115,15 @@ const Login = () => {
               </Link>
             </span>
           </Col>
+          {alert && 
+            <Col span={15}>
+              <Alert
+                message={alert}
+                type="error"
+                showIcon
+              />
+            </Col>
+          }
           <Col
             span={24}
             style={{
@@ -103,6 +133,7 @@ const Login = () => {
             }}
           >
             <Button
+              loading={loading}
               className="btn-song-of-playlist"
               size={"large"}
               style={{
@@ -113,6 +144,7 @@ const Login = () => {
                 justifyContent: "center",
                 fontSize: 24,
               }}
+              htmlType="submit"
             >
               Login
             </Button>

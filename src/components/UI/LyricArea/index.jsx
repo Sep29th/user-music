@@ -19,6 +19,7 @@ const handleConvert = (source) => {
       text: k[1]
     }
   });
+  arrayDetach.push({key: arrayDetach.length, time: 9999, text: ''});
   return arrayDetach.slice(countNotIsTime);
 }
 const LyricArea = () => {
@@ -48,10 +49,10 @@ const LyricArea = () => {
   return (
     lyricObj.statusLyric === 'on' ?
     (
-      <div ref={scrollableDivRef} id={"scrollableDiv"} className={"animate__animated animate__fadeInRight"} style={{
+      <div ref={scrollableDivRef} id={"scrollableDiv"} className={"animate__animated animate__fadeInLeft"} style={{
         position: "fixed",
-        bottom: 100,
-        right: 50,
+        bottom: 85,
+        left: 5,
         zIndex: 9999,
         width: 500,
         height: 250,
@@ -62,39 +63,41 @@ const LyricArea = () => {
         padding: "10px 20px",
         marginTop: "-80px",
         scrollBehavior: "smooth",
-        textAlign: "right"
+        textAlign: "left",
+        direction: "rtl"
       }}>
-        {listText.map(l => {
-          if (l?.key !== currentText?.key) return <p style={{color: "white"}}>{l.text}</p>
+        {listText.map((l, ind) => {
+          if (l?.key !== currentText?.key) return <p key={ind} style={{color: "white", direction: "ltr"}}>{l?.text}</p>
           else return <h2 style={{
-            color: "#31c27c", textShadow: `2px 7px 5px rgba(0,0,0,0.3), 
+            color: "#31c27c", direction: "ltr", textShadow: `2px 7px 5px rgba(0,0,0,0.3), 
     0px -4px 10px rgba(255,255,255,0.3)`
-          }} id={"currentLyric"} ref={currentLyricRef}>{currentText.text}</h2>
+          }} id={"currentLyric"} ref={currentLyricRef}>{currentText?.text}</h2>
         })}
       </div>
     ) : (
-        <div ref={scrollableDivRef} id={"scrollableDiv"} className={"animate__animated animate__fadeOutRight"} style={{
-        position: "fixed",
-        bottom: 100,
-        right: 50,
-        zIndex: 9999,
-        width: 500,
-        height: 250,
-        overflow: "auto",
-        backgroundColor: "#222222",
-        opacity: "0.85!important",
-        borderRadius: "9px",
-        padding: "10px 20px",
-        marginTop: "-80px",
-        scrollBehavior: "smooth",
-        textAlign: "right"
+        <div ref={scrollableDivRef} id={"scrollableDiv"} className={"animate__animated animate__fadeOutLeft"} style={{
+          position: "fixed",
+          bottom: 85,
+          left: 5,
+          zIndex: 9999,
+          width: 500,
+          height: 250,
+          overflow: "auto",
+          backgroundColor: "#222222",
+          opacity: "0.85!important",
+          borderRadius: "9px",
+          padding: "10px 20px",
+          marginTop: "-80px",
+          scrollBehavior: "smooth",
+          textAlign: "left",
+          direction: "rtl",
       }}>
-        {listText.map(l => {
-          if (l?.key !== currentText?.key) return <p style={{color: "white"}}>{l.text}</p>
+        {listText.map((l, ind) => {
+          if (l?.key !== currentText?.key) return <p key={ind} style={{color: "white", direction: "ltr"}}>{l?.text}</p>
           else return <h2 style={{
-            color: "#31c27c", textShadow: `2px 7px 5px rgba(0,0,0,0.3), 
+            color: "#31c27c", direction: "ltr", textShadow: `2px 7px 5px rgba(0,0,0,0.3), 
     0px -4px 10px rgba(255,255,255,0.3)`
-          }} id={"currentLyric"} ref={currentLyricRef}>{currentText.text}</h2>
+          }} id={"currentLyric"} ref={currentLyricRef}>{currentText?.text}</h2>
         })}
       </div>
     )
