@@ -1,11 +1,20 @@
-import { Alert, Button, Col, ConfigProvider, Form, Input, Row, Tabs } from "antd";
+import {
+  Alert,
+  Button,
+  Col,
+  ConfigProvider,
+  Form,
+  Input,
+  Row,
+  Tabs,
+} from "antd";
 import { useState } from "react";
 import { FaLock, FaLockOpen, FaUser } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { singerRegister, userRegister } from "../../services/api/auth";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/actions/auth";
-import { saveFavoritePlaylist } from "../../services/api/playlist"
+import { saveFavoritePlaylist } from "../../services/api/playlist";
 
 const Register = () => {
   const [status, setStatus] = useState("1");
@@ -17,45 +26,53 @@ const Register = () => {
   const navigate = useNavigate();
   const handleRegister = () => {
     if (status === "1") {
-      let name = form1.getFieldValue('name');
-      let email = form1.getFieldValue('email');
-      let password = form1.getFieldValue('password');
-      let repassword = form1.getFieldValue('repassword');
+      let name = form1.getFieldValue("name");
+      let email = form1.getFieldValue("email");
+      let password = form1.getFieldValue("password");
+      let repassword = form1.getFieldValue("repassword");
       if (password !== repassword) setAlert("Password and repass don't match!");
       else {
         (async () => {
           setLoading(true);
-          let infomation = await userRegister({ name: name, email: email, password: password });
+          let infomation = await userRegister({
+            name: name,
+            email: email,
+            password: password,
+          });
           if (infomation.status === "BAD_REQUEST") setAlert(infomation.message);
           else {
             await saveFavoritePlaylist(infomation.content);
             dispatch(login(infomation.content));
-            navigate("/");
+            navigate("/login");
           }
           setLoading(false);
         })();
       }
     } else {
-      let name = form2.getFieldValue('name');
-      let email = form2.getFieldValue('email');
-      let password = form2.getFieldValue('password');
-      let repassword = form2.getFieldValue('repassword');
+      let name = form2.getFieldValue("name");
+      let email = form2.getFieldValue("email");
+      let password = form2.getFieldValue("password");
+      let repassword = form2.getFieldValue("repassword");
       if (password !== repassword) setAlert("Password and repass don't match!");
       else {
         (async () => {
           setLoading(true);
-          let infomation = await singerRegister({ name: name, email: email, password: password });
+          let infomation = await singerRegister({
+            name: name,
+            email: email,
+            password: password,
+          });
           if (infomation.status === "BAD_REQUEST") setAlert(infomation.message);
           else {
             await saveFavoritePlaylist(infomation.content);
             dispatch(login(infomation.content));
-            navigate("/");
+            navigate("/login");
           }
           setLoading(false);
         })();
       }
     }
-  }
+  };
   return (
     <>
       <ConfigProvider
@@ -100,7 +117,7 @@ const Register = () => {
           <Col span={22} style={{ textAlign: "start" }}></Col>
           <Col span={22}>
             <Tabs
-              onChange={e => setStatus(e)}
+              onChange={(e) => setStatus(e)}
               items={[
                 {
                   label: (
@@ -144,7 +161,10 @@ const Register = () => {
                         </Form.Item>
                       </Col>
                       <Col span={24}>
-                        <Form.Item rules={[{ required: true }]} name={"password"}>
+                        <Form.Item
+                          rules={[{ required: true }]}
+                          name={"password"}
+                        >
                           <Input.Password
                             size={"large"}
                             addonBefore={
@@ -157,7 +177,10 @@ const Register = () => {
                         </Form.Item>
                       </Col>
                       <Col span={24}>
-                        <Form.Item rules={[{ required: true }]} name={"repassword"}>
+                        <Form.Item
+                          rules={[{ required: true }]}
+                          name={"repassword"}
+                        >
                           <Input.Password
                             size={"large"}
                             addonBefore={
@@ -214,7 +237,10 @@ const Register = () => {
                         </Form.Item>
                       </Col>
                       <Col span={24}>
-                        <Form.Item rules={[{ required: true }]} name={"password"}>
+                        <Form.Item
+                          rules={[{ required: true }]}
+                          name={"password"}
+                        >
                           <Input.Password
                             size={"large"}
                             addonBefore={
@@ -227,7 +253,10 @@ const Register = () => {
                         </Form.Item>
                       </Col>
                       <Col span={24}>
-                        <Form.Item rules={[{ required: true }]} name={"repassword"}>
+                        <Form.Item
+                          rules={[{ required: true }]}
+                          name={"repassword"}
+                        >
                           <Input.Password
                             size={"large"}
                             addonBefore={
@@ -273,15 +302,11 @@ const Register = () => {
               </Link>
             </span>
           </Col>
-          {alert &&
+          {alert && (
             <Col span={15}>
-              <Alert
-                message={alert}
-                type="error"
-                showIcon
-              />
+              <Alert message={alert} type="error" showIcon />
             </Col>
-          }
+          )}
           <Col
             span={24}
             style={{

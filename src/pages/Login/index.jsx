@@ -23,7 +23,7 @@ const Login = () => {
       }
       setLoading(false);
     })();
-  }
+  };
   return (
     <ConfigProvider
       theme={{
@@ -67,7 +67,7 @@ const Login = () => {
             <span className={"Login__title"}>USER LOGIN</span>
           </Col>
           <Col span={24}>
-            <Form.Item rules={[{ required: true }]} name={"email"}>
+            <Form.Item rules={[{ required: true }]} name={"username"}>
               <Input
                 size={"large"}
                 addonBefore={
@@ -115,15 +115,11 @@ const Login = () => {
               </Link>
             </span>
           </Col>
-          {alert && 
+          {alert && (
             <Col span={15}>
-              <Alert
-                message={alert}
-                type="error"
-                showIcon
-              />
+              <Alert message={alert} type="error" showIcon />
             </Col>
-          }
+          )}
           <Col
             span={24}
             style={{
