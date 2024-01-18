@@ -6,6 +6,7 @@ import { userLogin } from "../../services/api/auth";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/actions/auth";
+import { getUserById } from "../../services/api/user";
 const Login = () => {
   const [alert, setAlert] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,9 @@ const Login = () => {
       const infomation = await userLogin(values);
       if (infomation.status === "BAD_REQUEST") setAlert(infomation.message);
       else {
-        dispatch(login(infomation.content));
+        console.log(infomation.content)
+        const data = await getUserById(infomation.content.userId);
+        dispatch(login(data.content));
         navigate("/");
       }
       setLoading(false);
