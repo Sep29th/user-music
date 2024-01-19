@@ -1,4 +1,4 @@
-import {del, get, post, put, uploadFile} from "../../utils";
+import { del, get, post, put, uploadFile } from "../../utils";
 
 export const getAllSong = async () => {
   return await get("song");
@@ -24,7 +24,7 @@ export const getAllActiveSong = async (name = "") => {
   return await get(`song?status=${status}&name=${name}`);
 };
 export const getSongByName = async (name = "") => {
-  return await get("song?" + "name=" + name);
+  return await get(`song?name=${name}`);
 };
 
 export const saveSong = async (options) => {
@@ -62,4 +62,4 @@ export const getTotalSong = async () => {
 
 export const getTopSongWithMostListensByCategory = async () => {
   return await get(`song/topByCategory`);
-}
+};

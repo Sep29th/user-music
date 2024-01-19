@@ -54,8 +54,8 @@ const UploadSongOfSinger = (props) => {
       return {
         value: i.id,
         label: i.name,
-        disabled: true
-      }
+        disabled: true,
+      };
     }
     return {
       value: i.id,
@@ -65,6 +65,7 @@ const UploadSongOfSinger = (props) => {
   const onFinish = (values) => {
     (async () => {
       setLoading(true);
+      console.log("da vao day ");
       let form1 = new FormData();
       form1.append("sound", values.mp3.file);
       form1.append("lyric", values.filelyric.file);
@@ -75,13 +76,13 @@ const UploadSongOfSinger = (props) => {
         fileSound: linkS3.sound,
         fileLyric: linkS3.lyric,
         avatar: linkS3.avatar,
-        creator: {id: authInfo.id},
-        singers: values.singers.map(i => {
-          return {id: i}
+        creator: { id: authInfo.id },
+        singers: values.singers.map((i) => {
+          return { id: i };
         }),
-        categories: values.category.map(i => {
-          return {id: i}
-        })
+        categories: values.category.map((i) => {
+          return { id: i };
+        }),
       });
       console.log(newSong);
       setLoading(false);
@@ -147,9 +148,15 @@ const UploadSongOfSinger = (props) => {
                   </p>
                 </Dragger>
               </Form.Item>
-              {sourceSound && <audio controls src={sourceSound} style={{width: "100%"}}/>}
-              <Form.Item name={"name"} label="Name" rules={[{required: true}]}>
-                <Input/>
+              {sourceSound && (
+                <audio controls src={sourceSound} style={{ width: "100%" }} />
+              )}
+              <Form.Item
+                name={"name"}
+                label="Name"
+                rules={[{ required: true }]}
+              >
+                <Input />
               </Form.Item>
               <Form.Item
                 name={"category"}
@@ -179,7 +186,11 @@ const UploadSongOfSinger = (props) => {
                     width: "100%",
                   }}
                   defaultValue={[authInfo.id]}
-                  filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
                   placeholder="Please select singer"
                   options={optionSinger}
                 />

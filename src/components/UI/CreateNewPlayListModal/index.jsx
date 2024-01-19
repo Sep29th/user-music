@@ -1,18 +1,36 @@
-import {Alert, Avatar, Button, Col, Form, Input, List, Row, Select} from "antd";
-import {useState} from "react";
+import {
+  Alert,
+  Avatar,
+  Button,
+  Col,
+  Form,
+  Input,
+  List,
+  Row,
+  Select,
+} from "antd";
+import { useState } from "react";
 import "./style.css";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {IoMdClose} from "react-icons/io";
-import {debounce} from "../../../helpers/debounce/index.js";
-import {getSongByName} from "../../../services/api/song/index.js";
-import {addSongsToPlaylist, savePlaylistForUser} from "../../../services/api/playlist/index.js";
-import {useDispatch, useSelector} from "react-redux";
-import {addOnePlaylistToListPlaylist} from "../../../redux/actions/playlist/index.js";
+import { IoMdClose } from "react-icons/io";
+import { debounce } from "../../../helpers/debounce/index.js";
+import {
+  getAllActiveSong,
+  getSongByName,
+} from "../../../services/api/song/index.js";
+import {
+  addSongsToPlaylist,
+  savePlaylistForUser,
+} from "../../../services/api/playlist/index.js";
+import { useDispatch, useSelector } from "react-redux";
+import { addOnePlaylistToListPlaylist } from "../../../redux/actions/playlist/index.js";
 
 const CreateNewPlaylistModal = (props) => {
-  const {songTarget} = props;
-  const authInfo = useSelector(state => state.auth);
-  const [listChoosed, setListChoosed] = useState(songTarget ? [songTarget] : []);
+  const { songTarget } = props;
+  const authInfo = useSelector((state) => state.auth);
+  const [listChoosed, setListChoosed] = useState(
+    songTarget ? [songTarget] : []
+  );
   const [listSearch, setListSearch] = useState([]);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -20,9 +38,9 @@ const CreateNewPlaylistModal = (props) => {
   const [form] = Form.useForm();
   const onSelect = (value) => {
     if (listChoosed.length >= 1) setShowAlert(false);
-    if (listChoosed.findIndex(i => i.id === value) === -1)
-      setListChoosed([...listChoosed, listSearch.find(i => i.id === value)]);
-  }
+    if (listChoosed.findIndex((i) => i.id === value) === -1)
+      setListChoosed([...listChoosed, listSearch.find((i) => i.id === value)]);
+  };
   const onFinish = (value) => {
     if (listChoosed.length < 2) {
       setShowAlert(true);
@@ -30,17 +48,20 @@ const CreateNewPlaylistModal = (props) => {
     }
     (async () => {
       setLoading(true);
-      const newPlaylist = await savePlaylistForUser({name: value.name, creator: {id: authInfo.id}});
+      const newPlaylist = await savePlaylistForUser({
+        name: value.name,
+        creator: { id: authInfo.id },
+      });
       const result = await addSongsToPlaylist(newPlaylist.content.id, {
-        arraySong: listChoosed.map(i => i.id)
+        arraySong: listChoosed.map((i) => i.id),
       });
       dispatch(addOnePlaylistToListPlaylist(result.content));
       form.resetFields();
       setListChoosed([]);
       setListSearch([]);
       setLoading(false);
-    })()
-  }
+    })();
+  };
   return (
     <>
       <h3>Playlist title: </h3>
@@ -59,22 +80,33 @@ const CreateNewPlaylistModal = (props) => {
               ]}
               name={"name"}
             >
-              <Input placeholder="Name of playlist"/>
+              <Input placeholder="Name of playlist" />
             </Form.Item>
           </Col>
-          <Col span={24} style={{display: "flex", justifyContent: "end"}}>
+          <Col span={24} style={{ display: "flex", justifyContent: "end" }}>
             <Form.Item>
-              <Button loading={loading} htmlType="submit" className="btn-song-of-playlist">
+              <Button
+                loading={loading}
+                htmlType="submit"
+                className="btn-song-of-playlist"
+              >
                 Save
               </Button>
             </Form.Item>
           </Col>
           <Col span={24}>
-            {showAlert && <Alert style={{width: "100%"}} message="Tối thiểu 2 bài hát" type="error" showIcon/>}
+            {showAlert && (
+              <Alert
+                style={{ width: "100%" }}
+                message="Tối thiểu 2 bài hát"
+                type="error"
+                showIcon
+              />
+            )}
           </Col>
           <Col span={24}>
             <Select
-              style={{width: "100%"}}
+              style={{ width: "100%" }}
               showSearch
               placeholder="Select some songs"
               optionFilterProp="children"
@@ -82,15 +114,21 @@ const CreateNewPlaylistModal = (props) => {
               onSearch={debounce((value) => {
                 (async () => {
                   if (value === "") setListSearch([]);
-                  else setListSearch((await getSongByName(value)).content.filter(i => listChoosed.findIndex(k => k.id === i.id) === -1));
-                })()
+                  else
+                    setListSearch(
+                      (await getAllActiveSong(value)).content.filter(
+                        (i) =>
+                          listChoosed.findIndex((k) => k.id === i.id) === -1
+                      )
+                    );
+                })();
               }, 300)}
               filterOption={() => true}
-              options={listSearch.map(i => {
+              options={listSearch.map((i) => {
                 return {
                   label: i.name,
-                  value: i.id
-                }
+                  value: i.id,
+                };
               })}
             />
           </Col>
@@ -114,20 +152,19 @@ const CreateNewPlaylistModal = (props) => {
                   >
                     <List.Item.Meta
                       avatar={
-                        item.avatar ?
-                          (
-                            <Avatar
-                              size={"small"}
-                              shape="square"
-                              src={item.avatar}
-                            />
-                          ) : (
-                            <Avatar
-                              size={"small"}
-                              shape="square"
-                              src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
-                            />
-                          )
+                        item.avatar ? (
+                          <Avatar
+                            size={"small"}
+                            shape="square"
+                            src={item.avatar}
+                          />
+                        ) : (
+                          <Avatar
+                            size={"small"}
+                            shape="square"
+                            src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
+                          />
+                        )
                       }
                       title={
                         <div
@@ -140,9 +177,9 @@ const CreateNewPlaylistModal = (props) => {
                             <span>{item.name}</span>
                             {" - "}
                             <span
-                              style={{color: "#999999", fontWeight: "300"}}
+                              style={{ color: "#999999", fontWeight: "300" }}
                             >
-                              {item.singers.map(i => i.name).join(", ")}
+                              {item.singers.map((i) => i.name).join(", ")}
                             </span>
                           </div>
 
@@ -160,8 +197,12 @@ const CreateNewPlaylistModal = (props) => {
                               }}
                               size="small"
                               shape="circle"
-                              icon={<IoMdClose/>}
-                              onClick={() => setListChoosed(listChoosed.filter(i => i.id !== item.id))}
+                              icon={<IoMdClose />}
+                              onClick={() =>
+                                setListChoosed(
+                                  listChoosed.filter((i) => i.id !== item.id)
+                                )
+                              }
                             />
                           </div>
                         </div>
