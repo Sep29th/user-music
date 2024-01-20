@@ -5,7 +5,7 @@ import "animate.css";
 
 const AuthLayout = () => {
   return (
-    <>
+    <div style={{overflow: "hidden", height: "100vh"}}>
       <div className={"AuthLayout__background"}>
         <div className={"AuthLayout__background-overlay"}>
         </div>
@@ -42,7 +42,7 @@ const AuthLayout = () => {
       <div className="cube"></div>
       <div className="cube"></div>
       <div className="cube"></div>
-    </>
+    </div>
   );
 };
 

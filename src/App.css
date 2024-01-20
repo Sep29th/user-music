@@ -37,6 +37,10 @@
   padding: 50px;
 }
 
+.react-multi-carousel-item {
+  display: flex;
+}
+
 .hover__decoration:hover {
   text-decoration: underline;
 }

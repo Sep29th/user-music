@@ -64,13 +64,15 @@ const UploadSongOfSinger = (props) => {
   });
   const onFinish = (values) => {
     (async () => {
+      console.log(values);
       setLoading(true);
-      console.log("da vao day ");
       let form1 = new FormData();
       form1.append("sound", values.mp3.file);
       form1.append("lyric", values.filelyric.file);
       form1.append("avatar", values.thumbnail[0].originFileObj);
       const linkS3 = (await uploadFileSound(form1)).content;
+      values.singers = values.singers ? values.singers : [];
+      values.singers.push(parseInt(authInfo.id));
       const newSong = await saveSong({
         name: values.name,
         fileSound: linkS3.sound,
@@ -84,7 +86,6 @@ const UploadSongOfSinger = (props) => {
           return { id: i };
         }),
       });
-      console.log(newSong);
       setLoading(false);
       form.resetFields();
       setSourceSound(null);
@@ -171,13 +172,17 @@ const UploadSongOfSinger = (props) => {
                   }}
                   placeholder="Please select category"
                   options={optionCategory}
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
                 />
               </Form.Item>
 
               <Form.Item
                 name={"singers"}
                 label="Collab Singer"
-                rules={[{ required: true }]}
               >
                 <Select
                   mode="multiple"

@@ -15,11 +15,9 @@ const Login = () => {
   const onFinish = (values) => {
     (async () => {
       setLoading(true);
-      console.log(values);
       const infomation = await userLogin(values);
       if (infomation.status === "BAD_REQUEST") setAlert(infomation.message);
       else {
-        console.log(infomation.content)
         const data = await getUserById(infomation.content.userId);
         dispatch(login(data.content));
         navigate("/");

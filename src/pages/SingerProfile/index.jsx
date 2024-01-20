@@ -29,7 +29,6 @@ const SingerProfile = () => {
     (async () => {
       setSingerProfile((await getUserById(singerId)).content);
       const tmp = (await getAllSongBySingerId(singerId)).content;
-      console.log(tmp);
       if (authInfo.id === parseInt(singerId)) setTotalTrack(tmp);
       else setTotalTrack(tmp.filter(i => i.status === 2));
       setFollower(await getListFollower(singerId));

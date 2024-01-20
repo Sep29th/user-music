@@ -30,11 +30,10 @@ const RightSideBarHomePage = () => {
   const navigate = useNavigate();
   const [playlist, setPlaylist] = useState({});
   const [singerFollowed, setSingerFollowed] = useState({});
-  console.log(authInfo);
   useEffect(() => {
     (async () => {
-      setPlaylist(await getAllPlaylistByUserId(authInfo.id));
       setSingerFollowed(await getFollowedSinger(authInfo.id));
+      setPlaylist(await getAllPlaylistByUserId(authInfo.id));
     })()
   }, []);
   return (

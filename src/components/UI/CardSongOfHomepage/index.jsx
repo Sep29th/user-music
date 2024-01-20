@@ -12,7 +12,7 @@ const CardSongOfHomepage = (props) => {
   const fac = new FastAverageColor();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [averageColor, setAverageColor] = useState('#f2f2f2');
+  const [averageColor, setAverageColor] = useState('#615e57');
   const handlePlayNow = () => {
     dispatch(playOneSongNow(itemSong));
   }
@@ -21,9 +21,13 @@ const CardSongOfHomepage = (props) => {
   }
   useEffect(() => {
     (async () => {
-      const color = await fac.getColorAsync(itemSong.avatar ? itemSong.avatar : "https://play-lh.googleusercontent.com/D9X7m5dTNzjeSPxBqzh1RwrZLXJDFTpht9-8W8RJtiaOAlFxNvL5MnSDRxoDnQRYhz0");
-      console.log(color.hex);
-      setAverageColor(color.hex);
+      try {
+        // await fetch('https://mybucketmusic.s3.ap-south-1.amazonaws.com/song/avatars/9cadbfb7f41d45e6aa1cedbef1eb919b.png').then(obj => console.log(obj));
+        // const color = await fac.getColorAsync(itemSong.avatar + "");
+        // setAverageColor(color.hex);
+      } catch (e) {
+        console.log(e);
+      }
     })()
   }, [fac, itemSong.avatar]);
   return (
@@ -64,6 +68,7 @@ const CardSongOfHomepage = (props) => {
           width: 160,
           marginBottom: 8,
           zIndex: 999,
+          height: "100%"
         }}
         size="small"
         cover={

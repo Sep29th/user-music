@@ -28,8 +28,9 @@ const LyricArea = () => {
   const [currentText, setCurrentText] = useState({text: 'No lyric'});
   const currentLyricRef = useRef(null);
   const scrollableDivRef = useRef(null);
+  const [isHover, setIsHover] = useState(true);
   useEffect(() => {
-    if (currentLyricRef.current && scrollableDivRef.current) {
+    if (currentLyricRef.current && scrollableDivRef.current && isHover) {
       let element = currentLyricRef.current;
       let container = scrollableDivRef.current;
       let offsetTop = element.offsetTop;
@@ -49,7 +50,7 @@ const LyricArea = () => {
   return (
     lyricObj.statusLyric === 'on' ?
     (
-      <div ref={scrollableDivRef} id={"scrollableDiv"} className={"animate__animated animate__fadeInLeft"} style={{
+      <div onMouseEnter={() => setIsHover(false)} onMouseLeave={() => setIsHover(true)} ref={scrollableDivRef} id={"scrollableDiv"} className={"animate__animated animate__fadeInLeft"} style={{
         position: "fixed",
         bottom: 85,
         left: 5,
@@ -68,7 +69,7 @@ const LyricArea = () => {
       }}>
         {listText.map((l, ind) => {
           if (l?.key !== currentText?.key) return <p key={ind} style={{color: "white", direction: "ltr"}}>{l?.text}</p>
-          else return <h2 style={{
+          else return <h2 className="animate__animated animate__fadeIn" style={{
             color: "#31c27c", direction: "ltr", textShadow: `2px 7px 5px rgba(0,0,0,0.3), 
     0px -4px 10px rgba(255,255,255,0.3)`
           }} id={"currentLyric"} ref={currentLyricRef}>{currentText?.text}</h2>
