@@ -14,6 +14,7 @@ import {
 import { updateListPlaylist } from "../../../redux/actions/playlist/index.js";
 import LyricArea from "../../UI/LyricArea/index.jsx";
 import { FaGear } from "react-icons/fa6";
+import {clearQueue} from "../../../redux/actions/songQueue/index.js";
 
 const UserLayout = () => {
   const navigate = useNavigate();
@@ -45,7 +46,10 @@ const UserLayout = () => {
       danger: true,
       label: (
         <div style={{ width: 140, display: "flex", justifyContent: "space-between" }}
-          onClick={() => navigate(`/login`)}>
+          onClick={() => {
+            dispatch(clearQueue());
+            navigate(`/login`);
+          }}>
           <span style={{ fontWeight: 700 }}>Logout</span>
           <FaPowerOff style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }} />
         </div>
