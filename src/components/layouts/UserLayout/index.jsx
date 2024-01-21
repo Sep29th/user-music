@@ -67,7 +67,7 @@ const UserLayout = () => {
     } else {
       navigate('/login');
     }
-  }, []);
+  }, [authInfo, dispatch, navigate]);
   return (
     <>
       {view &&
