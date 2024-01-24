@@ -9,35 +9,65 @@ import { updateFavoritePlaylist } from "../../../redux/actions/favorite/index.js
 import {
   getAllPlaylistByUserId,
   getAllSongByPlaylistId,
-  getFavoritePlaylistByUserId
+  getFavoritePlaylistByUserId,
 } from "../../../services/api/playlist/index.js";
 import { updateListPlaylist } from "../../../redux/actions/playlist/index.js";
 import LyricArea from "../../UI/LyricArea/index.jsx";
 import { FaGear } from "react-icons/fa6";
-import {clearQueue} from "../../../redux/actions/songQueue/index.js";
+import { clearQueue } from "../../../redux/actions/songQueue/index.js";
+import { getLocalStorage } from "../../../services/localStorage/index.js";
+import { decode } from "../../../services/api/auth/index.js";
+import { login } from "../../../redux/actions/auth/index.js";
 
 const UserLayout = () => {
   const navigate = useNavigate();
-  const authInfo = useSelector(state => state.auth);
+  const authInfo = useSelector((state) => state.auth);
   const [view, setView] = useState(false);
   const dispatch = useDispatch();
   const items = [
     {
       key: "1",
       label: (
-        <div style={{ width: 140, display: "flex", justifyContent: "space-between" }} onClick={() => navigate("/detail-information")}>
+        <div
+          style={{
+            width: 140,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          onClick={() => navigate("/detail-information")}
+        >
           <span style={{ fontWeight: 700 }}>Your information</span>
-          <FaGear style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }} />
+          <FaGear
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 18,
+            }}
+          />
         </div>
       ),
     },
     {
       key: "2",
       label: (
-        <div style={{ width: 140, display: "flex", justifyContent: "space-between" }}
-          onClick={() => navigate(`/singer-profile/${authInfo.id}`)}>
+        <div
+          style={{
+            width: 140,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          onClick={() => navigate(`/singer-profile/${authInfo.id}`)}
+        >
           <span style={{ fontWeight: 700 }}>Your profile</span>
-          <FaUser style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }} />
+          <FaUser
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 18,
+            }}
+          />
         </div>
       ),
     },
@@ -45,148 +75,172 @@ const UserLayout = () => {
       key: "3",
       danger: true,
       label: (
-        <div style={{ width: 140, display: "flex", justifyContent: "space-between" }}
+        <div
+          style={{
+            width: 140,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
           onClick={() => {
             dispatch(clearQueue());
             navigate(`/login`);
-          }}>
+          }}
+        >
           <span style={{ fontWeight: 700 }}>Logout</span>
-          <FaPowerOff style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }} />
+          <FaPowerOff
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 18,
+            }}
+          />
         </div>
       ),
     },
   ];
   useEffect(() => {
-    if (authInfo.id) {
-      setView(true);
+    if (getLocalStorage("user-token") != "" ) {
       (async () => {
-        const data = await getAllSongByPlaylistId((await getFavoritePlaylistByUserId(authInfo.id)).content.id);
-        if (data.content) dispatch(updateFavoritePlaylist(data.content));
-        dispatch(updateListPlaylist((await getAllPlaylistByUserId(authInfo.id)).content));
-      })()
+        if(authInfo.id==null){
+          const data = await decode(getLocalStorage('user-token'))
+          dispatch(login(data.content))
+          console.log("ok nay ", authInfo)
+        }
+        else if (authInfo.id) {
+          setView(true);
+          const data = await getAllSongByPlaylistId(
+            (
+              await getFavoritePlaylistByUserId(authInfo.id)
+            ).content.id
+          );
+          if (data.content) dispatch(updateFavoritePlaylist(data.content));
+          dispatch(
+            updateListPlaylist(
+              (await getAllPlaylistByUserId(authInfo.id)).content
+            )
+          );
+        }
+      })();
     } else {
-      navigate('/login');
+      navigate("/login");
     }
-  }, [authInfo, dispatch, navigate]);
+  }, [authInfo, navigate]);
   return (
     <>
-      {view &&
-        (
-          <>
-            <LyricArea />
-            {/* header */}
-            <Row gutter={[0, 15]} justify={"center"} style={{ marginBottom: 16 }}>
-              <Col span={24} style={{ backgroundColor: "#333333" }}>
-                <Row justify={"center"}>
+      {view && (
+        <>
+          <LyricArea />
+          {/* header */}
+          <Row gutter={[0, 15]} justify={"center"} style={{ marginBottom: 16 }}>
+            <Col span={24} style={{ backgroundColor: "#333333" }}>
+              <Row justify={"center"}>
+                <Col
+                  span={15}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    height: "70px",
+                    textAlign: "center",
+                  }}
+                >
+                  <Col span={4} style={{ borderRight: "1px solid #cccccc" }}>
+                    <NavLink
+                      className={"Header__nav"}
+                      to={"/"}
+                      style={{
+                        color: "white",
+                        fontSize: "25px",
+                        fontWeight: "700",
+                      }}
+                    >
+                      Soundtify
+                    </NavLink>
+                  </Col>
                   <Col
-                    span={15}
+                    span={2}
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      height: "70px",
+                      borderRight: "1px solid #cccccc",
                       textAlign: "center",
                     }}
                   >
-                    <Col span={4} style={{ borderRight: "1px solid #cccccc" }}>
-                      <NavLink
-                        className={"Header__nav"}
-                        to={"/"}
-                        style={{
-                          color: "white",
-                          fontSize: "25px",
-                          fontWeight: "700",
-                        }}
-                      >
-                        Soundtify
-                      </NavLink>
-                    </Col>
+                    <NavLink
+                      className={"Header__nav"}
+                      to={"/library"}
+                      style={{
+                        color: "white",
+                        fontSize: "15px",
+                        fontWeight: "700",
+                      }}
+                    >
+                      Library
+                    </NavLink>
+                  </Col>
+                  <Col span={13}></Col>
+                  {authInfo.role === 3 && authInfo.status === true ? (
                     <Col
-                      span={2}
+                      span={3}
                       style={{
                         borderRight: "1px solid #cccccc",
                         textAlign: "center",
+                        float: "right",
                       }}
                     >
                       <NavLink
                         className={"Header__nav"}
-                        to={"/library"}
+                        to={"/for-singer"}
                         style={{
                           color: "white",
                           fontSize: "15px",
                           fontWeight: "700",
                         }}
                       >
-                        Library
+                        For singer
                       </NavLink>
                     </Col>
-                    <Col span={13}></Col>
-                    {(authInfo.role === 3 && authInfo.status === true) ?
-                      (
-                        <Col
-                          span={3}
+                  ) : (
+                    <Col
+                      span={3}
+                      style={{
+                        textAlign: "center",
+                        float: "right",
+                      }}
+                    ></Col>
+                  )}
+                  <Col span={2}>
+                    <Dropdown menu={{ items }} placement="bottomRight">
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <img
+                          src={authInfo.avatar}
                           style={{
-                            borderRight: "1px solid #cccccc",
-                            textAlign: "center",
-                            float: "right",
+                            width: "26px",
+                            height: "26px",
+                            borderRadius: "50%",
+                            objectPosition: "center",
                           }}
-                        >
-                          <NavLink
-                            className={"Header__nav"}
-                            to={"/for-singer"}
-                            style={{
-                              color: "white",
-                              fontSize: "15px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            For singer
-                          </NavLink>
-                        </Col>
-                      ) : (
-                        <Col
-                          span={3}
-                          style={{
-                            textAlign: "center",
-                            float: "right",
-                          }}
-                        >
-                        </Col>
-                      )
-                    }
-                    <Col span={2}>
-                      <Dropdown menu={{ items }} placement="bottomRight">
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <img
-                            src={authInfo.avatar}
-                            style={{
-                              width: "26px",
-                              height: "26px",
-                              borderRadius: "50%",
-                              objectPosition: "center",
-                            }}
-                          />
-                          <FaCaretDown
-                            style={{ color: "white", marginLeft: "10px" }}
-                          />
-                        </div>
-                      </Dropdown>
-                    </Col>
+                        />
+                        <FaCaretDown
+                          style={{ color: "white", marginLeft: "10px" }}
+                        />
+                      </div>
+                    </Dropdown>
                   </Col>
-                </Row>
-              </Col>
-            </Row>
-            {/* body */}
-            <Outlet />
-            {/* footer */}
-            <FooterUserLayoutAudioPlayer />
-          </>
-        )}
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+          {/* body */}
+          <Outlet />
+          {/* footer */}
+          <FooterUserLayoutAudioPlayer />
+        </>
+      )}
     </>
   );
 };

@@ -16,8 +16,6 @@ const post = async (path, options = {}) => {
 export const loginAdmin = async (object) => {
   return post("login/admin", object);
 }
-
-
 export const userLogin = async (options) => {
   return await post("login/user", options);
 }
@@ -28,4 +26,10 @@ export const userRegister = async (options) => {
 
 export const singerRegister = async (options) => {
   return await post("register/singer", options);
+}
+
+export const decode = async(token)=>{
+  return await post("decode",{
+    token : token
+  })
 }

@@ -2,11 +2,13 @@ import { Alert, Button, Col, ConfigProvider, Form, Input, Row } from "antd";
 import "./Login.scss";
 import { FaLock, FaUser } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { userLogin } from "../../services/api/auth";
+import { decode, userLogin } from "../../services/api/auth";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/actions/auth";
 import { getUserById } from "../../services/api/user";
+import { setLocalStorage } from "../../services/localStorage";
+import { info } from "sass";
 const Login = () => {
   const [alert, setAlert] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -18,7 +20,9 @@ const Login = () => {
       const infomation = await userLogin(values);
       if (infomation.status === "BAD_REQUEST") setAlert(infomation.message);
       else {
-        const data = await getUserById(infomation.content.userId);
+        console.log(infomation)
+        setLocalStorage("user-token",infomation.content.token);
+        const data = await decode(infomation.content.token);
         dispatch(login(data.content));
         navigate("/");
       }
