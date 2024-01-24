@@ -15,7 +15,7 @@ import { updateListPlaylist } from "../../../redux/actions/playlist/index.js";
 import LyricArea from "../../UI/LyricArea/index.jsx";
 import { FaGear } from "react-icons/fa6";
 import { clearQueue } from "../../../redux/actions/songQueue/index.js";
-import { getLocalStorage } from "../../../services/localStorage/index.js";
+import { deleteLocalStorage, getLocalStorage } from "../../../services/localStorage/index.js";
 import { decode } from "../../../services/api/auth/index.js";
 import { login } from "../../../redux/actions/auth/index.js";
 
@@ -83,6 +83,7 @@ const UserLayout = () => {
           }}
           onClick={() => {
             dispatch(clearQueue());
+            deleteLocalStorage('user-token')
             navigate(`/login`);
           }}
         >
@@ -103,9 +104,21 @@ const UserLayout = () => {
     if (getLocalStorage("user-token") != "" ) {
       (async () => {
         if(authInfo.id==null){
-          const data = await decode(getLocalStorage('user-token'))
-          dispatch(login(data.content))
+          const dataS = await decode(getLocalStorage('user-token'))
+          dispatch(login(dataS.content))
           console.log("ok nay ", authInfo)
+          setView(true);
+          const data = await getAllSongByPlaylistId(
+            (
+              await getFavoritePlaylistByUserId(authInfo.id)
+            ).content.id
+          );
+          if (data.content) dispatch(updateFavoritePlaylist(data.content));
+          dispatch(
+            updateListPlaylist(
+              (await getAllPlaylistByUserId(authInfo.id)).content
+            )
+          );
         }
         else if (authInfo.id) {
           setView(true);
@@ -125,7 +138,7 @@ const UserLayout = () => {
     } else {
       navigate("/login");
     }
-  }, [authInfo, navigate]);
+  }, [authInfo,dispatch, navigate]);
   return (
     <>
       {view && (

@@ -56,7 +56,6 @@ export const uploadFile = async (path,formData)=>{
     const response = await fetch(API_DOMAIN + path,{
         method : "POST",
         headers : {
-          "Content-Type" : `application/json`,
           'Authorization' : `Bearer ${getLocalStorage('user-token')}`
         },
         body:formData

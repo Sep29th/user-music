@@ -109,7 +109,8 @@ const DetailInfoMation = () => {
                 email: authInfo.email ? authInfo.email : '',
                 nickname: authInfo.nickName ? authInfo.nickName : '',
                 website: authInfo.socialMediaLink ? authInfo.socialMediaLink : '',
-                bio: authInfo.bio ? authInfo.bio : ''
+                bio: authInfo.bio ? authInfo.bio : '',
+                password : authInfo.password
               }}
               style={{
                 maxWidth: 600,

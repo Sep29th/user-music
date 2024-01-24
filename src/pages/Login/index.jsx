@@ -3,11 +3,11 @@ import "./Login.scss";
 import { FaLock, FaUser } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { decode, userLogin } from "../../services/api/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/actions/auth";
 import { getUserById } from "../../services/api/user";
-import { setLocalStorage } from "../../services/localStorage";
+import { getLocalStorage, setLocalStorage } from "../../services/localStorage";
 import { info } from "sass";
 const Login = () => {
   const [alert, setAlert] = useState(false);
@@ -23,12 +23,32 @@ const Login = () => {
         console.log(infomation)
         setLocalStorage("user-token",infomation.content.token);
         const data = await decode(infomation.content.token);
-        dispatch(login(data.content));
-        navigate("/");
+        if(data.status!="ok"){
+          setAlert(data.message);
+        }
+        else{
+          dispatch(login(data.content));
+          navigate("/");
+        }
+        
       }
       setLoading(false);
     })();
   };
+  useEffect(()=>{
+    if(getLocalStorage('user-token')!=""){
+      (async()=>{
+        const dataDecode = await decode(getLocalStorage('user-token'));
+        if(dataDecode.status!="ok"){
+          setAlert(dataDecode.message);
+        }
+        else{
+          dispatch(login(dataDecode.content))
+          navigate("/")
+        }
+      })()
+    }
+  },[])
   return (
     <ConfigProvider
       theme={{
