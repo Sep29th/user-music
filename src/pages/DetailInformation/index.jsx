@@ -60,8 +60,18 @@ const DetailInfoMation = () => {
         formData.append("avatar", values.avatar.file);
         linkS3.avatar = (await uploadAvatar(formData)).content;
       }
+      let objUpdt = {
+        bio: values.bio,
+        email: values.email,
+        name: values.name,
+        ...linkS3,
+        id: authInfo.id,
+        socialMediaLink: values.website,
+        nickName: values.nickname
+      }
+      if (values.password) objUpdt.password = values.password;
       let userInfoUpdated = {}
-      if (authInfo.role === 3) userInfoUpdated = (await updateSinger({...values, ...linkS3, id: authInfo.id, socialMediaLink: values.website, nickName: values.nickname})).content;
+      if (authInfo.role === 3) userInfoUpdated = (await updateSinger(objUpdt)).content;
       else userInfoUpdated = (await updateUser({...values, ...linkS3, id: authInfo.id})).content;
       dispatch(login(userInfoUpdated));
       form.setFieldsValue({
